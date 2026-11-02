@@ -1,0 +1,54 @@
+# PROTOTYPE (spike F). Second overlay, applied after dashboards.variants.overlay.yaml: only the
+# required/optional/computed choices the baseline resource made by hand that cannot be derived from
+# the OAS (default rule: in `required` -> required, else optional). Kept separate so the variant
+# mapping can be measured on its own (`diff-tree.mjs --ignore-mode`).
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: elasticstack_kibana_dashboard mode fidelity (spike F, slice only)
+  version: 0.0.1
+actions:
+  # ---- policies: "an API-defaulted optional field is optional_computed in this subtree"
+  - target: $.components.schemas['Kibana_HTTP_APIs_kbn-dashboard-panel-type-vis'].properties.config.anyOf[?@.allOf].allOf[?@.properties.drilldowns].properties.drilldowns.items
+    update: { x-tf-default-mode: optional_computed }
+  - target: $.components.schemas['Kibana_HTTP_APIs_visMetricChart','Kibana_HTTP_APIs_visXyChart']
+    update: { x-tf-default-mode: optional_computed }
+  - target: $.components.schemas['Kibana_HTTP_APIs_visXyStyling']
+    description: decorations opt back out of the xy policy (except fill_opacity below)
+    update: { x-tf-default-mode: optional }
+  # ---- single overrides
+  - target: $.components.schemas['Kibana_HTTP_APIs_visXyStylingAreas'].properties.fill_opacity
+    update: { x-tf-mode: optional_computed }
+  - target: $.components.schemas['Kibana_HTTP_APIs_kbn-dashboard-panel-type-vis'].properties.config.anyOf[?@.allOf].allOf[?@.properties.drilldowns].properties.drilldowns.items.anyOf[?@.title=='dashboard_drilldown' || @.title=='discover_drilldown']..properties.trigger
+    description: by-value dashboard/discover trigger has a single allowed value, so the baseline computes it
+    update: { x-tf-mode: computed }
+  - target: $.components.schemas['Kibana_HTTP_APIs_visXyChartNoESQL','Kibana_HTTP_APIs_visXyChartESQL'].properties['axis','styling','legend']
+    update: { x-tf-mode: required }
+  - target: $.components.schemas['Kibana_HTTP_APIs_visXyStyling'].properties.fitting
+    update: { x-tf-mode: required }
+  - target: $.components.schemas['Kibana_HTTP_APIs_visApiXyAxisConfig'].properties.x.properties['domain','grid','ticks']
+    update: { x-tf-mode: optional_computed }
+  - target: $.components.schemas['Kibana_HTTP_APIs_visApiXyAxisConfig'].properties.x.properties.labels.properties.orientation
+    update: { x-tf-mode: optional_computed }
+  - target: $.components.schemas['Kibana_HTTP_APIs_visApiXyAxisConfig'].properties['x','y','y2'].properties.title.properties.visible
+    update: { x-tf-mode: optional_computed }
+  - target: $.components.schemas['Kibana_HTTP_APIs_visApiXyAxisConfig'].properties['y','y2'].properties.scale
+    update: { x-tf-mode: optional_computed }
+  - target: $.components.schemas['Kibana_HTTP_APIs_visApiXyAxisConfig'].properties['y','y2'].properties.domain
+    update: { x-tf-mode: required }
+  - target: $.components.schemas['Kibana_HTTP_APIs_visXyLegendInside','Kibana_HTTP_APIs_visXyLegendOutsideVertical','Kibana_HTTP_APIs_visXyLegendOutsideHorizontal'].properties['placement','visibility']
+    update: { x-tf-mode: optional_computed }
+  - target: $.components.schemas['Kibana_HTTP_APIs_visXyLegendOutsideVertical','Kibana_HTTP_APIs_visXyLegendOutsideHorizontal'].properties.position
+    update: { x-tf-mode: optional_computed }
+  - target: $.components.schemas['Kibana_HTTP_APIs_visXyLegendOutsideVertical'].properties.size
+    update: { x-tf-mode: optional_computed }
+  - target: $.components.schemas[?@.properties.grid && @.properties.config].properties.id
+    description: panels[].id (all panel types)
+    update: { x-tf-mode: optional_computed }
+  - target: $.components.schemas['Kibana_HTTP_APIs_kbn-dashboard-section'].properties.id
+    update: { x-tf-mode: optional_computed }
+  - target: $.components.schemas['Kibana_HTTP_APIs_visXyLegendInside','Kibana_HTTP_APIs_visXyLegendOutsideVertical'].properties.layout.properties.truncate.properties.max_lines
+    description: usage-site override on a $ref (visLegendTruncateAfterLines has a default, baseline keeps it optional)
+    update: { x-tf-mode: optional }
+  - target: $.components.schemas['Kibana_HTTP_APIs_visXyLegendOutsideHorizontal'].properties.layout.anyOf[?@.properties.truncate].properties.truncate.properties.max_lines
+    update: { x-tf-mode: optional }

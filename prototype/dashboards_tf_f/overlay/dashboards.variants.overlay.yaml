@@ -1,0 +1,294 @@
+# PROTOTYPE (spike F). Provider-owned OpenAPI Overlay 1.0 that adds the `x-tf-*` variant mapping to
+# Kibana's bundled OAS (oas_docs/output/kibana.yaml). Kibana is unchanged. Vocabulary: see spikes/F.md.
+#
+# Conventions used by every target below, to keep targets robust to re-bundling:
+#   * Address shared shapes by component name, never by `anyOf[<index>]`.
+#   * Address inline union branches with RFC 9535 filters on a structural property
+#     (`anyOf[?@.properties.ref_id]`, `allOf[?@.properties.trigger]`), never by index.
+#   * Per-location overrides go on the *usage site* (the property node, possibly a `$ref` sibling),
+#     so a component shared by several locations never has to be cloned.
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: elasticstack_kibana_dashboard variant mapping (spike F, slice only)
+  version: 0.0.1
+actions:
+  # ---------------------------------------------------------------- root envelope
+  - target: $.components.schemas['Kibana_HTTP_APIs_kbn-dashboard-data']
+    description: Root. TF-only provider plumbing attributes; API-only fields the baseline does not expose.
+    update:
+      x-tf-extra:
+        - { name: id, kind: string, mode: computed }
+        - { name: dashboard_id, kind: string, mode: optional_computed }
+        - { name: space_id, kind: string, mode: optional_computed }
+  - target: $.components.schemas['Kibana_HTTP_APIs_kbn-dashboard-data'].properties['project_routing','esql_approximation']
+    description: "EXCEPTION ignore: API-only root fields absent from the baseline."
+    update: { x-tf-ignore: true }
+
+  # ---------------------------------------------------------------- U1 panel vs section (hand-coded split)
+  - target: $.components.schemas['Kibana_HTTP_APIs_kbn-dashboard-data'].properties.panels.items
+    description: "U1 SPECIAL CASE: section items leave panels[] for a root sections[] attribute."
+    update:
+      x-tf-split: { attribute: sections, recognizer: { present: panels } }
+
+  # ---------------------------------------------------------------- U2 panel type (root panels + section panels)
+  - target: $.components.schemas['Kibana_HTTP_APIs_kbn-dashboard-data'].properties.panels.items.anyOf[?@.discriminator.propertyName=='type']
+    description: U2 root panels. Convention {type}_config; config_json escape hatch; custom_content not in baseline.
+    update:
+      x-tf-union:
+        mode: keys
+        recognizer: { property: type }
+        keep: sibling
+        content: config
+        key: '{value}_config'
+        exclude: [custom_content]
+        group: conflicts_with
+        extra:
+          - { name: config_json, kind: json-string, mode: optional_computed, values: [vis, markdown] }
+  - target: $.components.schemas['Kibana_HTTP_APIs_kbn-dashboard-section'].properties.panels.items
+    description: U2 section panels (same union, inlined again by the bundler).
+    update:
+      x-tf-union:
+        mode: keys
+        recognizer: { property: type }
+        keep: sibling
+        content: config
+        key: '{value}_config'
+        exclude: [custom_content]
+        group: conflicts_with
+        extra:
+          - { name: config_json, kind: json-string, mode: optional_computed, values: [vis, markdown] }
+
+  # ---------------------------------------------------------------- image panel (flatten, U3, U12)
+  - target: $.components.schemas['Kibana_HTTP_APIs_kbn-dashboard-panel-type-image'].properties.config.properties.image_config
+    description: "FLATTEN: config.image_config.* sits directly under image_config in Terraform."
+    update: { x-tf-flatten: true }
+  - target: $.components.schemas['Kibana_HTTP_APIs_kbn-dashboard-panel-type-image'].properties.config.properties.image_config.properties.src
+    description: U3 image src; key = type value (file, url).
+    update:
+      x-tf-union: { mode: keys, recognizer: { property: type } }
+  - target: $.components.schemas['Kibana_HTTP_APIs_kbn-dashboard-panel-type-image'].properties.config.properties.drilldowns.items
+    description: U12 image drilldowns; key = type value.
+    update:
+      x-tf-union: { mode: keys, recognizer: { property: type } }
+
+  # ---------------------------------------------------------------- vis panel (U4, U5, U13)
+  - target: $.components.schemas['Kibana_HTTP_APIs_kbn-dashboard-panel-type-vis'].properties.config
+    description: U4 by value vs by reference; ref_id presence is the recognizer.
+    update:
+      x-tf-union:
+        mode: keys
+        recognizer: { present: ref_id }
+        variants: { by_reference: present, by_value: absent }
+  - target: $.components.schemas['Kibana_HTTP_APIs_visApiConfig']
+    description: "U5 chart type. Convention {type}_config; 5 exceptions."
+    update:
+      x-tf-union:
+        mode: keys
+        recognizer: { property: type }
+        key: '{value}_config'
+        variants:
+          xy_chart_config: xy
+          metric_chart_config: metric
+          pie_chart_config: pie
+          datatable_config: data_table
+          tagcloud_config: tag_cloud
+  # by-value chrome (allOf member without $ref, distributed into every chart)
+  - target: $.components.schemas['Kibana_HTTP_APIs_kbn-dashboard-panel-type-vis'].properties.config.anyOf[?@.allOf].allOf[?@.properties.drilldowns].properties.references
+    description: "JSON LEAF: by-value references -> references_json."
+    update: { x-tf-json: true }
+  - target: $.components.schemas['Kibana_HTTP_APIs_kbn-dashboard-panel-type-vis'].properties.config.anyOf[?@.allOf].allOf[?@.properties.drilldowns].properties.drilldowns.items
+    description: U13 by-value drilldowns; key = type value.
+    update:
+      x-tf-union: { mode: keys, recognizer: { property: type } }
+  # by-reference branch
+  - target: $.components.schemas['Kibana_HTTP_APIs_kbn-dashboard-panel-type-vis'].properties.config.anyOf[?@.properties.ref_id].properties.references
+    description: "JSON LEAF: by-reference references -> references_json."
+    update: { x-tf-json: true }
+  - target: $.components.schemas['Kibana_HTTP_APIs_kbn-dashboard-panel-type-vis'].properties.config.anyOf[?@.properties.ref_id].properties.drilldowns.items
+    description: "U13 PER-LOCATION OVERRIDE: by-reference drilldown keys drop the _drilldown suffix."
+    update:
+      x-tf-union:
+        mode: keys
+        recognizer: { property: type }
+        variants: { dashboard: dashboard_drilldown, discover: discover_drilldown, url: url_drilldown }
+  - target: $.components.schemas['Kibana_HTTP_APIs_kbn-dashboard-panel-type-vis'].properties.config.anyOf[?@.properties.ref_id].properties.drilldowns.items.anyOf[?@.title=='dashboard_drilldown'].allOf[?@.properties.trigger].properties.trigger
+    description: "PER-LOCATION OVERRIDE ignore: by-reference dashboard drilldown has no trigger attribute."
+    update: { x-tf-ignore: true }
+  - target: $.components.schemas['Kibana_HTTP_APIs_kbn-dashboard-panel-type-vis'].properties.config.anyOf[?@.properties.ref_id].properties.drilldowns.items.anyOf[?@.title=='discover_drilldown'].properties.trigger
+    description: "PER-LOCATION OVERRIDE ignore: by-reference discover drilldown has no trigger attribute."
+    update: { x-tf-ignore: true }
+
+  # ---------------------------------------------------------------- shared lens leaves
+  - target: $.components.schemas['Kibana_HTTP_APIs_kbn-as-code-filters-schema_asCodeFilterSchema']
+    description: "U11 JSON LEAF: every filter item is one JSON string under filter_json (root and chart filters)."
+    update: { x-tf-json: { wrap: filter_json } }
+
+  # ---------------------------------------------------------------- metric chart (U7 merged, JSON leaves)
+  - target: $.components.schemas['Kibana_HTTP_APIs_visMetricChart']
+    description: "U7 NO VARIANT KEY: ES|QL and DSL metric merged into one object."
+    update:
+      x-tf-union: { mode: merge }
+  - target: $.components.schemas['Kibana_HTTP_APIs_visMetricNoESQL','Kibana_HTTP_APIs_visMetricESQL'].properties['data_source','breakdown_by']
+    description: "JSON LEAF: data_source_json, breakdown_by_json."
+    update: { x-tf-json: true }
+  - target: $.components.schemas['Kibana_HTTP_APIs_visMetricNoESQL','Kibana_HTTP_APIs_visMetricESQL'].properties.metrics.items
+    description: "JSON LEAF: metrics[].config_json."
+    update: { x-tf-json: { wrap: config_json } }
+  - target: $.components.schemas['Kibana_HTTP_APIs_visMetricNoESQL','Kibana_HTTP_APIs_visMetricESQL'].properties.styling
+    description: "EXCEPTION ignore: metric styling is not in the baseline."
+    update: { x-tf-ignore: true }
+
+  # ---------------------------------------------------------------- xy chart (U6 merged, U8, presentation reshaping)
+  - target: $.components.schemas['Kibana_HTTP_APIs_visXyChart']
+    description: "U6 NO VARIANT KEY: ES|QL and DSL xy merged into one object."
+    update:
+      x-tf-union: { mode: merge }
+  - target: $.components.schemas['Kibana_HTTP_APIs_visXyLayersNoESQL','Kibana_HTTP_APIs_visXyLayersESQL']
+    description: "U8 layer kind. type stays as a sibling; all data-layer types share one key; annotations unsupported."
+    update:
+      x-tf-union:
+        mode: keys
+        recognizer: { property: type }
+        keep: sibling
+        variants: { reference_line_layer: reference_lines }
+        default-variant: data_layer
+        exclude: [annotations, annotation_group]
+        group: conflicts_with
+        discriminator: false
+  - target: $.components.schemas['Kibana_HTTP_APIs_visXyLayerNoESQL','Kibana_HTTP_APIs_visXyLayerESQL'].properties['data_source','breakdown_by','x']
+    description: "JSON LEAF: data_source_json, breakdown_by_json, x_json."
+    update: { x-tf-json: true }
+  - target: $.components.schemas['Kibana_HTTP_APIs_visXyLayerNoESQL','Kibana_HTTP_APIs_visXyLayerESQL'].properties.y.items
+    description: "JSON LEAF: y[].config_json."
+    update: { x-tf-json: { wrap: config_json } }
+  - target: $.components.schemas['Kibana_HTTP_APIs_visXyReferenceLineLayerNoESQL','Kibana_HTTP_APIs_visXyReferenceLineLayerESQLStatic'].properties.data_source
+    description: "JSON LEAF: data_source_json."
+    update: { x-tf-json: true }
+  - target: $.components.schemas['Kibana_HTTP_APIs_visXyReferenceLineLayerNoESQL','Kibana_HTTP_APIs_visXyReferenceLineLayerESQLStatic'].properties.thresholds
+    description: >-
+      EXCEPTION custom: the baseline threshold is value-dependent (non-static operations go whole into
+      value_json; text is a string while the API has {visible}). Declared shape + named hand-written codec.
+    update:
+      x-tf-custom:
+        codec: xy_reference_line_thresholds
+        kind: list
+        mode: required
+        attributes:
+          - { name: axis, kind: string, mode: optional }
+          - { name: color_json, kind: json-string, mode: optional }
+          - { name: column, kind: string, mode: optional }
+          - { name: fill, kind: string, mode: optional }
+          - { name: icon, kind: string, mode: optional }
+          - { name: operation, kind: string, mode: optional }
+          - { name: stroke_dash, kind: string, mode: optional }
+          - { name: stroke_width, kind: number, mode: optional }
+          - { name: text, kind: string, mode: optional }
+          - { name: value_json, kind: json-string, mode: optional }
+  # axis
+  - target: $.components.schemas['Kibana_HTTP_APIs_visApiXyAxisConfig'].properties['x','y','y2'].properties.domain
+    description: "JSON LEAF: axis.*.domain_json."
+    update: { x-tf-json: true }
+  - target: $.components.schemas['Kibana_HTTP_APIs_visApiXyAxisConfig'].properties['x','y','y2'].properties['grid','ticks']
+    description: "UNWRAP: {visible: bool} becomes a bool attribute."
+    update: { x-tf-unwrap: visible }
+  - target: $.components.schemas['Kibana_HTTP_APIs_visApiXyAxisConfig'].properties['x','y','y2'].properties.labels
+    description: "FLATTEN with prefix: labels.orientation -> label_orientation."
+    update: { x-tf-flatten: { prefix: label_ } }
+  - target: $.components.schemas['Kibana_HTTP_APIs_visApiXyAxisConfig'].properties['x','y','y2'].properties.title.properties.text
+    description: "RENAME: title.text -> title.value."
+    update: { x-tf-name: value }
+  # styling -> decorations + fitting
+  - target: $.components.schemas['Kibana_HTTP_APIs_visXyChartNoESQL','Kibana_HTTP_APIs_visXyChartESQL'].properties.styling
+    description: "RENAME: styling -> decorations."
+    update: { x-tf-name: decorations }
+  - target: $.components.schemas['Kibana_HTTP_APIs_visXyStyling'].properties['areas','bars','overlays','points']
+    description: "FLATTEN: styling sub-objects collapse into decorations."
+    update: { x-tf-flatten: true }
+  - target: $.components.schemas['Kibana_HTTP_APIs_visXyStyling'].properties.fitting
+    description: "HOIST: styling.fitting becomes a sibling of decorations."
+    update: { x-tf-hoist: true }
+  - target: $.components.schemas['Kibana_HTTP_APIs_visXyStyling'].properties.interpolation
+    update: { x-tf-name: line_interpolation }
+  - target: $.components.schemas['Kibana_HTTP_APIs_visXyStylingAreas'].properties.fill
+    description: "EXCEPTION ignore: areas.fill (added in 9.6.0) is not in the baseline."
+    update: { x-tf-ignore: true }
+  - target: $.components.schemas['Kibana_HTTP_APIs_visXyStylingBars'].properties.minimum_height
+    update: { x-tf-name: minimum_bar_height }
+  - target: $.components.schemas['Kibana_HTTP_APIs_visXyStylingBars'].properties.data_labels
+    update: { x-tf-unwrap: visible, x-tf-name: show_value_labels }
+  - target: $.components.schemas['Kibana_HTTP_APIs_visXyStylingOverlays'].properties.current_time_marker
+    update: { x-tf-unwrap: visible, x-tf-name: show_current_time_marker }
+  - target: $.components.schemas['Kibana_HTTP_APIs_visXyStylingOverlays'].properties.partial_buckets
+    update: { x-tf-unwrap: visible, x-tf-name: show_end_zones }
+  - target: $.components.schemas['Kibana_HTTP_APIs_visXyStylingPoints'].properties.visibility
+    description: "RENAME + ENUM MAP: points.visibility hidden/visible -> point_visibility never/always."
+    update:
+      x-tf-name: point_visibility
+      x-tf-enum-map: { auto: auto, visible: always, hidden: never }
+  - target: $.components.schemas['Kibana_HTTP_APIs_visXyFitting'].properties.emphasize
+    update: { x-tf-name: dotted }
+  - target: $.components.schemas['Kibana_HTTP_APIs_visXyFitting'].properties.extend
+    update: { x-tf-name: end_value }
+  # legend: 3-way undiscriminated union merged into one object
+  - target: $.components.schemas['Kibana_HTTP_APIs_visXyLegend']
+    description: "MERGE: inside / outside-vertical / outside-horizontal legends become one object."
+    update:
+      x-tf-union: { mode: merge }
+  - target: $.components.schemas['Kibana_HTTP_APIs_visXyLegendInside','Kibana_HTTP_APIs_visXyLegendOutsideVertical','Kibana_HTTP_APIs_visXyLegendOutsideHorizontal'].properties.placement
+    description: "RENAME + TYPE + ENUM MAP: placement inside/outside -> inside true/false."
+    update:
+      x-tf-name: inside
+      x-tf-type: bool
+      x-tf-enum-map: { inside: true, outside: false }
+  - target: $.components.schemas['Kibana_HTTP_APIs_visXyLegendInside'].properties.position
+    description: "PER-BRANCH RENAME: the inside legend's position is alignment in Terraform."
+    update: { x-tf-name: alignment }
+  - target: $.components.schemas['Kibana_HTTP_APIs_visXyLegendInside','Kibana_HTTP_APIs_visXyLegendOutsideVertical','Kibana_HTTP_APIs_visXyLegendOutsideHorizontal'].properties.series_header
+    description: "EXCEPTION ignore: series_header is not in the baseline."
+    update: { x-tf-ignore: true }
+  - target: $.components.schemas['Kibana_HTTP_APIs_visXyLegendInside','Kibana_HTTP_APIs_visXyLegendOutsideVertical'].properties.layout
+    update: { x-tf-flatten: true }
+  - target: $.components.schemas['Kibana_HTTP_APIs_visXyLegendOutsideHorizontal'].properties.layout
+    description: "MERGE + FLATTEN: horizontal layout is a grid|list union."
+    update:
+      x-tf-flatten: true
+      x-tf-union: { mode: merge }
+  - target: $..[?@.properties.truncate.properties.max_lines].properties.truncate
+    description: "FLATTEN: layout.truncate.* (all four legend layouts)."
+    update: { x-tf-flatten: true }
+  - target: $..[?@.properties.truncate.properties.max_lines].properties.truncate.properties.max_lines
+    update: { x-tf-name: truncate_after_lines }
+  - target: $..[?@.properties.truncate.properties.max_lines].properties.truncate.properties.enabled
+    description: "EXCEPTION ignore: truncate.enabled is not in the baseline."
+    update: { x-tf-ignore: true }
+  - target: $..[?@.properties.truncate.properties.max_lines].properties.type
+    description: "EXCEPTION ignore: layout.type is not in the baseline."
+    update: { x-tf-ignore: true }
+  - target: $.components.schemas['Kibana_HTTP_APIs_visXyLegendOutsideHorizontal'].properties.layout.anyOf[?@.properties.type.enum[0]=='list'].properties.type
+    description: "EXCEPTION ignore: list layout type is not in the baseline."
+    update: { x-tf-ignore: true }
+
+  # ---------------------------------------------------------------- pinned panels (U9, U10)
+  - target: $.components.schemas['Kibana_HTTP_APIs_kbn-dashboard-data'].properties.pinned_panels.items
+    description: U9 control type. Convention {type}_config.
+    update:
+      x-tf-union:
+        mode: keys
+        recognizer: { property: type }
+        keep: sibling
+        content: config
+        key: '{value}_config'
+  - target: $.components.schemas[?@.properties.config && @.properties.grow && @.properties.width].properties.id
+    description: "EXCEPTION ignore: pinned control id is not in the baseline."
+    update: { x-tf-ignore: true }
+  - target: $.components.schemas['Kibana_HTTP_APIs_kbn-controls-schemas-controls-group-schema-range-slider-control'].properties.config
+    description: "U10 range slider source; values_source defaults to field when absent. Convention by_{value}."
+    update:
+      x-tf-union:
+        mode: keys
+        recognizer: { property: values_source, default: field }
+        key: 'by_{value}'
+  - target: $.components.schemas['Kibana_HTTP_APIs_kbn-controls-schemas-range-slider-control-schema-esql'].properties.values_source
+    description: "EXCEPTION keep: by_esql repeats the recognizer as a required attribute."
+    update: { x-tf-keep-recognizer: true }

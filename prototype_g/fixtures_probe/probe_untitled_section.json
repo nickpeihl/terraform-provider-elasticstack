@@ -1,0 +1,25 @@
+{
+  "title": "probe empty-title section",
+  "panels": [
+    {
+      "title": "",
+      "grid": {
+        "y": 0
+      },
+      "panels": [
+        {
+          "type": "markdown",
+          "grid": {
+            "x": 0,
+            "y": 0,
+            "w": 10,
+            "h": 5
+          },
+          "config": {
+            "content": "in section"
+          }
+        }
+      ]
+    }
+  ]
+}

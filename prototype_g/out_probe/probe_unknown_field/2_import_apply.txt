@@ -1,0 +1,47 @@
+
+Warning: Provider development overrides are in effect
+
+The following provider development overrides are set in the CLI
+configuration:
+ - elastic/elasticstack in /Users/nickpeihl/Development/Elastic/terraform-provider-elasticstack-worktrees/dashboards-tf-g/prototype_g/out_probe/bin
+
+The behavior may therefore not match any released version of the provider and
+applying changes may cause the state to become incompatible with published
+releases.
+elasticstack_kibana_dashboard.this: Preparing import... [id=default/probe_unknown_field]
+elasticstack_kibana_dashboard.this: Refreshing state... [id=default/probe_unknown_field]
+
+Terraform will perform the following actions:
+
+  # elasticstack_kibana_dashboard.this will be imported
+    resource "elasticstack_kibana_dashboard" "this" {
+        dashboard_id = "probe_unknown_field"
+        id           = "default/probe_unknown_field"
+        options      = {}
+        panels       = [
+            {
+                grid         = {
+                    h = 5
+                    w = 10
+                    x = 0
+                    y = 0
+                }
+                image_config = {
+                    src = {
+                        url = {
+                            url = "https://x/y.png"
+                        }
+                    }
+                }
+                type         = "image"
+            },
+        ]
+        space_id     = "default"
+        title        = "probe unknown field"
+    }
+
+Plan: 1 to import, 0 to add, 0 to change, 0 to destroy.
+elasticstack_kibana_dashboard.this: Importing... [id=default/probe_unknown_field]
+elasticstack_kibana_dashboard.this: Import complete [id=default/probe_unknown_field]
+
+Apply complete! Resources: 1 imported, 0 added, 0 changed, 0 destroyed.

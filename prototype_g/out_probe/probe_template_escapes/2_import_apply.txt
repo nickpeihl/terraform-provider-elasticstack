@@ -1,0 +1,65 @@
+
+Warning: Provider development overrides are in effect
+
+The following provider development overrides are set in the CLI
+configuration:
+ - elastic/elasticstack in /Users/nickpeihl/Development/Elastic/terraform-provider-elasticstack-worktrees/dashboards-tf-g/prototype_g/out_probe/bin
+
+The behavior may therefore not match any released version of the provider and
+applying changes may cause the state to become incompatible with published
+releases.
+elasticstack_kibana_dashboard.this: Preparing import... [id=default/probe_template_escapes]
+elasticstack_kibana_dashboard.this: Refreshing state... [id=default/probe_template_escapes]
+
+Terraform will perform the following actions:
+
+  # elasticstack_kibana_dashboard.this will be imported
+    resource "elasticstack_kibana_dashboard" "this" {
+        dashboard_id = "probe_template_escapes"
+        filters      = [
+            {
+                filter_json = jsonencode(
+                    {
+                        condition = {
+                            field    = "msg"
+                            operator = "is"
+                            value    = "${not_a_var}"
+                        }
+                        type      = "condition"
+                    }
+                )
+            },
+        ]
+        id           = "default/probe_template_escapes"
+        options      = {}
+        panels       = [
+            {
+                config_json     = jsonencode(
+                    {
+                        content = "Hello ${user} %{ if x }y%{ endif }"
+                    }
+                )
+                grid            = {
+                    h = 5
+                    w = 10
+                    x = 0
+                    y = 0
+                }
+                markdown_config = {
+                    by_value = {
+                        content  = "Hello ${user} %{ if x }y%{ endif }"
+                        settings = {}
+                    }
+                }
+                type            = "markdown"
+            },
+        ]
+        space_id     = "default"
+        title        = "probe ${title} %{x}"
+    }
+
+Plan: 1 to import, 0 to add, 0 to change, 0 to destroy.
+elasticstack_kibana_dashboard.this: Importing... [id=default/probe_template_escapes]
+elasticstack_kibana_dashboard.this: Import complete [id=default/probe_template_escapes]
+
+Apply complete! Resources: 1 imported, 0 added, 0 changed, 0 destroyed.

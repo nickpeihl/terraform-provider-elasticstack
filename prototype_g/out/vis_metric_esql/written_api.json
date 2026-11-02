@@ -1,0 +1,88 @@
+{
+  "options": {},
+  "panels": [
+    {
+      "config": {
+        "data_source": {
+          "query": "FROM kibana_sample_data_logs | WHERE timestamp >= ?_tstart AND timestamp < ?_tend | STATS avg_bytes = AVG(bytes)",
+          "type": "esql"
+        },
+        "description": "ESQL Metric with trend background chart",
+        "filters": [],
+        "metrics": [
+          {
+            "background_chart": {
+              "type": "trend"
+            },
+            "column": "avg_bytes",
+            "type": "primary"
+          }
+        ],
+        "title": "Metric - ESQL with trendline",
+        "type": "metric"
+      },
+      "grid": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "type": "vis"
+    },
+    {
+      "config": {
+        "breakdown_by": {
+          "column": "extension.keyword"
+        },
+        "data_source": {
+          "query": "FROM logs | STATS ...",
+          "type": "esql"
+        },
+        "description": "ESQL Metric with background chart and breakdown",
+        "filters": [],
+        "metrics": [
+          {
+            "background_chart": {
+              "max_value": {
+                "column": "bytes"
+              },
+              "type": "bar"
+            },
+            "color": {
+              "range": "absolute",
+              "steps": [
+                {
+                  "color": "red",
+                  "lt": 0
+                }
+              ],
+              "type": "dynamic"
+            },
+            "column": "count",
+            "type": "primary"
+          },
+          {
+            "column": "bytes",
+            "compare": {
+              "baseline": 100,
+              "palette": "status",
+              "to": "baseline",
+              "value": false
+            },
+            "type": "secondary"
+          }
+        ],
+        "title": "Metric - ESQL Complex case",
+        "type": "metric"
+      },
+      "grid": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "type": "vis"
+    }
+  ],
+  "title": "Metric ES|QL"
+}

@@ -1,0 +1,128 @@
+{
+  "options": {},
+  "panels": [
+    {
+      "config": {
+        "content": "## Web logs overview\n\n&nbsp;\n\nCreated with the [Dashboards API](https://www.elastic.co/docs/api/doc/kibana) using the Kibana sample web logs dataset (`kibana_sample_data_logs`). Contains:\n- This markdown panel\n- 2 metrics, showing request count and average response size\n- A line chart based on an ES|QL query\n\n&nbsp;\n\n&nbsp;\n\n[Learn more about dashboards](https://www.elastic.co/docs/explore-analyze/dashboards)",
+        "settings": {}
+      },
+      "grid": {
+        "h": 15,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "type": "markdown"
+    },
+    {
+      "config": {
+        "data_source": {
+          "index_pattern": "kibana_sample_data_logs",
+          "time_field": "timestamp",
+          "type": "data_view_spec"
+        },
+        "filters": [],
+        "metrics": [
+          {
+            "operation": "count",
+            "type": "primary"
+          }
+        ],
+        "query": {
+          "expression": "",
+          "language": "kql"
+        },
+        "type": "metric"
+      },
+      "grid": {
+        "h": 5,
+        "w": 12,
+        "x": 24,
+        "y": 0
+      },
+      "type": "vis"
+    },
+    {
+      "config": {
+        "data_source": {
+          "index_pattern": "kibana_sample_data_logs",
+          "time_field": "timestamp",
+          "type": "data_view_spec"
+        },
+        "filters": [],
+        "metrics": [
+          {
+            "field": "bytes",
+            "operation": "average",
+            "type": "primary"
+          }
+        ],
+        "query": {
+          "expression": "",
+          "language": "kql"
+        },
+        "type": "metric"
+      },
+      "grid": {
+        "h": 5,
+        "w": 12,
+        "x": 36,
+        "y": 0
+      },
+      "type": "vis"
+    },
+    {
+      "config": {
+        "axis": {
+          "x": {
+            "title": {
+              "visible": false
+            }
+          }
+        },
+        "filters": [],
+        "layers": [
+          {
+            "data_source": {
+              "query": "FROM kibana_sample_data_logs | STATS count = COUNT() BY BUCKET(@timestamp, 75, ?_tstart, ?_tend)",
+              "type": "esql"
+            },
+            "type": "line",
+            "x": {
+              "column": "BUCKET(@timestamp, 75, ?_tstart, ?_tend)"
+            },
+            "y": [
+              {
+                "column": "count"
+              }
+            ]
+          }
+        ],
+        "legend": {
+          "placement": "outside",
+          "position": "bottom",
+          "visibility": "auto"
+        },
+        "styling": {
+          "areas": {},
+          "bars": {},
+          "fitting": {
+            "type": "none"
+          },
+          "overlays": {},
+          "points": {}
+        },
+        "title": "Requests over time",
+        "type": "xy"
+      },
+      "grid": {
+        "h": 10,
+        "w": 24,
+        "x": 24,
+        "y": 5
+      },
+      "type": "vis"
+    }
+  ],
+  "title": "Web logs overview"
+}

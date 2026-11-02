@@ -1,0 +1,37 @@
+{
+  "description": "Image panel with file src (placeholder file_id — may be rejected by Kibana if it validates uploads)",
+  "options": {},
+  "panels": [
+    {
+      "config": {
+        "image_config": {
+          "alt_text": "placeholder file reference",
+          "src": {
+            "file_id": "acc-test-placeholder-file-id",
+            "type": "file"
+          }
+        }
+      },
+      "grid": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "type": "image"
+    }
+  ],
+  "query": {
+    "expression": "",
+    "language": "kql"
+  },
+  "refresh_interval": {
+    "pause": true,
+    "value": 0
+  },
+  "time_range": {
+    "from": "now-15m",
+    "to": "now"
+  },
+  "title": "Image file src"
+}

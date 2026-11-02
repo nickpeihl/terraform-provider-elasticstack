@@ -1,0 +1,16 @@
+terraform {
+  required_providers {
+    elasticstack = { source = "elastic/elasticstack" }
+  }
+}
+provider "elasticstack" {
+  kibana {
+    endpoints = ["http://127.0.0.1:__PORT__"]
+    username  = "elastic"
+    password  = "changeme"
+  }
+}
+import {
+  to = elasticstack_kibana_dashboard.this
+  id = "default/__ID__"
+}

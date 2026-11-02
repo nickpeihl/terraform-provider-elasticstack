@@ -1,0 +1,6 @@
+generate=0
+import_apply=0
+drift_plan=0 (0=no-op,2=diff)
+replace_apply=0
+post_write_plan=0 (0=no-op,2=diff)
+roundtrip=1

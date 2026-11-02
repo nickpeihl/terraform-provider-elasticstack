@@ -1,0 +1,314 @@
+
+Warning: Provider development overrides are in effect
+
+The following provider development overrides are set in the CLI
+configuration:
+ - elastic/elasticstack in /Users/nickpeihl/Development/Elastic/terraform-provider-elasticstack-worktrees/dashboards-tf-g/prototype_g/out_xy_patched/bin
+
+The behavior may therefore not match any released version of the provider and
+applying changes may cause the state to become incompatible with published
+releases.
+elasticstack_kibana_dashboard.this: Preparing import... [id=default/oas_create_simple]
+elasticstack_kibana_dashboard.this: Refreshing state... [id=default/oas_create_simple]
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  ~ update in-place
+
+Terraform will perform the following actions:
+
+  # elasticstack_kibana_dashboard.this will be updated in-place
+  # (imported from "default/oas_create_simple")
+  ~ resource "elasticstack_kibana_dashboard" "this" {
+        dashboard_id = "oas_create_simple"
+        id           = "default/oas_create_simple"
+        options      = {}
+      ~ panels       = [
+          ~ {
+              ~ config_json     = jsonencode(
+                    {
+                      - content = <<-EOT
+                            ## Web logs overview
+                            
+                            &nbsp;
+                            
+                            Created with the [Dashboards API](https://www.elastic.co/docs/api/doc/kibana) using the Kibana sample web logs dataset (`kibana_sample_data_logs`). Contains:
+                            - This markdown panel
+                            - 2 metrics, showing request count and average response size
+                            - A line chart based on an ES|QL query
+                            
+                            &nbsp;
+                            
+                            &nbsp;
+                            
+                            [Learn more about dashboards](https://www.elastic.co/docs/explore-analyze/dashboards)
+                        EOT
+                    }
+                ) -> (known after apply)
+                grid            = {
+                    h = 15
+                    w = 24
+                    x = 0
+                    y = 0
+                }
+              + id              = (known after apply)
+                markdown_config = {
+                    by_value = {
+                        content  = <<-EOT
+                            ## Web logs overview
+                            
+                            &nbsp;
+                            
+                            Created with the [Dashboards API](https://www.elastic.co/docs/api/doc/kibana) using the Kibana sample web logs dataset (`kibana_sample_data_logs`). Contains:
+                            - This markdown panel
+                            - 2 metrics, showing request count and average response size
+                            - A line chart based on an ES|QL query
+                            
+                            &nbsp;
+                            
+                            &nbsp;
+                            
+                            [Learn more about dashboards](https://www.elastic.co/docs/explore-analyze/dashboards)
+                        EOT
+                        settings = {}
+                    }
+                }
+                type            = "markdown"
+            },
+          ~ {
+              ~ config_json = jsonencode(
+                    {
+                      - data_source = {
+                          - index_pattern = "kibana_sample_data_logs"
+                          - time_field    = "timestamp"
+                          - type          = "data_view_spec"
+                        }
+                      - metrics     = [
+                          - {
+                              - operation = "count"
+                              - type      = "primary"
+                            },
+                        ]
+                      - type        = "metric"
+                    }
+                ) -> (known after apply)
+                grid        = {
+                    h = 5
+                    w = 12
+                    x = 24
+                    y = 0
+                }
+              + id          = (known after apply)
+                type        = "vis"
+              ~ vis_config  = {
+                  ~ by_value = {
+                      ~ metric_chart_config = {
+                          ~ data_source_json      = jsonencode( # whitespace changes
+                                {
+                                    index_pattern = "kibana_sample_data_logs"
+                                    time_field    = "timestamp"
+                                    type          = "data_view_spec"
+                                }
+                            )
+                          + ignore_global_filters = (known after apply)
+                          ~ metrics               = [
+                              ~ {
+                                  ~ config_json = jsonencode( # whitespace changes
+                                        {
+                                            operation = "count"
+                                            type      = "primary"
+                                        }
+                                    )
+                                },
+                            ]
+                            query                 = {
+                                expression = null
+                                language   = "kql"
+                            }
+                          + sampling              = (known after apply)
+                        }
+                    }
+                }
+            },
+          ~ {
+              ~ config_json = jsonencode(
+                    {
+                      - data_source = {
+                          - index_pattern = "kibana_sample_data_logs"
+                          - time_field    = "timestamp"
+                          - type          = "data_view_spec"
+                        }
+                      - metrics     = [
+                          - {
+                              - field     = "bytes"
+                              - operation = "average"
+                              - type      = "primary"
+                            },
+                        ]
+                      - type        = "metric"
+                    }
+                ) -> (known after apply)
+                grid        = {
+                    h = 5
+                    w = 12
+                    x = 36
+                    y = 0
+                }
+              + id          = (known after apply)
+                type        = "vis"
+              ~ vis_config  = {
+                  ~ by_value = {
+                      ~ metric_chart_config = {
+                          ~ data_source_json      = jsonencode( # whitespace changes
+                                {
+                                    index_pattern = "kibana_sample_data_logs"
+                                    time_field    = "timestamp"
+                                    type          = "data_view_spec"
+                                }
+                            )
+                          + ignore_global_filters = (known after apply)
+                          ~ metrics               = [
+                              ~ {
+                                  ~ config_json = jsonencode( # whitespace changes
+                                        {
+                                            field     = "bytes"
+                                            operation = "average"
+                                            type      = "primary"
+                                        }
+                                    )
+                                },
+                            ]
+                            query                 = {
+                                expression = null
+                                language   = "kql"
+                            }
+                          + sampling              = (known after apply)
+                        }
+                    }
+                }
+            },
+          ~ {
+              ~ config_json = jsonencode(
+                    {
+                      - axis    = {
+                          - x = {
+                              - title = {
+                                  - visible = false
+                                }
+                            }
+                        }
+                      - layers  = [
+                          - {
+                              - data_source = {
+                                  - query = "FROM kibana_sample_data_logs | STATS count = COUNT() BY BUCKET(@timestamp, 75, ?_tstart, ?_tend)"
+                                  - type  = "esql"
+                                }
+                              - type        = "line"
+                              - x           = {
+                                  - column = "BUCKET(@timestamp, 75, ?_tstart, ?_tend)"
+                                }
+                              - y           = [
+                                  - {
+                                      - column = "count"
+                                    },
+                                ]
+                            },
+                        ]
+                      - legend  = {
+                          - placement  = "outside"
+                          - position   = "bottom"
+                          - visibility = "auto"
+                        }
+                      - styling = {
+                          - fitting = {
+                              - type = "none"
+                            }
+                        }
+                      - title   = "Requests over time"
+                      - type    = "xy"
+                    }
+                ) -> (known after apply)
+                grid        = {
+                    h = 10
+                    w = 24
+                    x = 24
+                    y = 5
+                }
+              + id          = (known after apply)
+                type        = "vis"
+              ~ vis_config  = {
+                  ~ by_value = {
+                      ~ xy_chart_config = {
+                          ~ axis        = {
+                              ~ x = {
+                                  + domain_json       = (known after apply)
+                                  + grid              = (known after apply)
+                                  + label_orientation = (known after apply)
+                                  + ticks             = (known after apply)
+                                    title             = {
+                                        visible = false
+                                    }
+                                }
+                            }
+                          ~ decorations = {
+                              + fill_opacity = (known after apply)
+                            }
+                            fitting     = {
+                                type = "none"
+                            }
+                          ~ layers      = [
+                              ~ {
+                                  ~ data_layer = {
+                                      ~ data_source_json      = jsonencode( # whitespace changes
+                                            {
+                                                query = "FROM kibana_sample_data_logs | STATS count = COUNT() BY BUCKET(@timestamp, 75, ?_tstart, ?_tend)"
+                                                type  = "esql"
+                                            }
+                                        )
+                                      + ignore_global_filters = (known after apply)
+                                      + sampling              = (known after apply)
+                                        x_json                = jsonencode(
+                                            {
+                                                column = "BUCKET(@timestamp, 75, ?_tstart, ?_tend)"
+                                            }
+                                        )
+                                        y                     = [
+                                            {
+                                                config_json = jsonencode(
+                                                    {
+                                                        column = "count"
+                                                    }
+                                                )
+                                            },
+                                        ]
+                                    }
+                                    type       = "line"
+                                },
+                            ]
+                          ~ legend      = {
+                                inside     = false
+                                position   = "bottom"
+                              + size       = (known after apply)
+                                visibility = "auto"
+                            }
+                            query       = {
+                                expression = null
+                                language   = "kql"
+                            }
+                            title       = "Requests over time"
+                        }
+                    }
+                }
+            },
+        ]
+        space_id     = "default"
+        title        = "Web logs overview"
+    }
+
+Plan: 1 to import, 0 to add, 1 to change, 0 to destroy.
+elasticstack_kibana_dashboard.this: Importing... [id=default/oas_create_simple]
+elasticstack_kibana_dashboard.this: Import complete [id=default/oas_create_simple]
+elasticstack_kibana_dashboard.this: Modifying... [id=default/oas_create_simple]
+elasticstack_kibana_dashboard.this: Modifications complete after 0s [id=default/oas_create_simple]
+
+Apply complete! Resources: 1 imported, 0 added, 1 changed, 0 destroyed.

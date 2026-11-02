@@ -1,0 +1,61 @@
+
+Warning: Provider development overrides are in effect
+
+The following provider development overrides are set in the CLI
+configuration:
+ - elastic/elasticstack in /Users/nickpeihl/Development/Elastic/terraform-provider-elasticstack-worktrees/dashboards-tf-g/prototype_g/out_stock/bin
+
+The behavior may therefore not match any released version of the provider and
+applying changes may cause the state to become incompatible with published
+releases.
+elasticstack_kibana_dashboard.this: Preparing import... [id=default/image_file_src]
+elasticstack_kibana_dashboard.this: Refreshing state... [id=default/image_file_src]
+
+Terraform will perform the following actions:
+
+  # elasticstack_kibana_dashboard.this will be imported
+    resource "elasticstack_kibana_dashboard" "this" {
+        dashboard_id     = "image_file_src"
+        description      = "Image panel with file src (placeholder file_id — may be rejected by Kibana if it validates uploads)"
+        id               = "default/image_file_src"
+        options          = {}
+        panels           = [
+            {
+                grid         = {
+                    h = 8
+                    w = 24
+                    x = 0
+                    y = 0
+                }
+                image_config = {
+                    alt_text = "placeholder file reference"
+                    src      = {
+                        file = {
+                            file_id = "acc-test-placeholder-file-id"
+                        }
+                    }
+                }
+                type         = "image"
+            },
+        ]
+        query            = {
+            expression = ""
+            language   = "kql"
+        }
+        refresh_interval = {
+            pause = true
+            value = 0
+        }
+        space_id         = "default"
+        time_range       = {
+            from = "now-15m"
+            to   = "now"
+        }
+        title            = "Image file src"
+    }
+
+Plan: 1 to import, 0 to add, 0 to change, 0 to destroy.
+elasticstack_kibana_dashboard.this: Importing... [id=default/image_file_src]
+elasticstack_kibana_dashboard.this: Import complete [id=default/image_file_src]
+
+Apply complete! Resources: 1 imported, 0 added, 0 changed, 0 destroyed.

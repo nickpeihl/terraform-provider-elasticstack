@@ -1,0 +1,47 @@
+{
+  "description": "Dashboard with pinned range slider controls",
+  "options": {},
+  "pinned_panels": [
+    {
+      "config": {
+        "data_view_id": "spike0-data-view",
+        "field_name": "source.bytes",
+        "ignore_validations": true,
+        "step": 5,
+        "title": "Bytes Range Updated",
+        "use_global_filters": false,
+        "value": [
+          "50",
+          "400"
+        ]
+      },
+      "grow": true,
+      "type": "range_slider_control",
+      "width": "medium"
+    },
+    {
+      "config": {
+        "esql_query": "FROM logs-* | STATS min = MIN(bytes), max = MAX(bytes)",
+        "ignore_validations": false,
+        "step": 10,
+        "title": "Bytes Range",
+        "use_global_filters": true,
+        "values_source": "esql"
+      },
+      "type": "range_slider_control"
+    }
+  ],
+  "query": {
+    "expression": "",
+    "language": "kql"
+  },
+  "refresh_interval": {
+    "pause": true,
+    "value": 0
+  },
+  "time_range": {
+    "from": "now-15m",
+    "to": "now"
+  },
+  "title": "Pinned range slider"
+}

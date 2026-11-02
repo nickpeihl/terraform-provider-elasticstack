@@ -1,0 +1,3 @@
+$.panels[0].config.filters: fixture=undefined written=[]
+$.panels[1].config.filters: fixture=undefined written=[]
+$.options: fixture=undefined written={}

@@ -1,0 +1,29 @@
+{
+  "title": "probe non-default control values",
+  "pinned_panels": [
+    {
+      "type": "options_list_control",
+      "width": "medium",
+      "grow": true,
+      "config": {
+        "title": "Response code",
+        "data_view_id": "90943e30-9a47-11e8-b64d-95841ca0b247",
+        "field_name": "response.keyword",
+        "values_source": "field",
+        "use_global_filters": false,
+        "ignore_validations": true,
+        "exclude": true,
+        "exists_selected": true,
+        "run_past_timeout": true,
+        "search_technique": "prefix",
+        "selected_options": [],
+        "single_select": false,
+        "sort": {
+          "by": "_key",
+          "direction": "asc"
+        }
+      }
+    }
+  ],
+  "panels": []
+}

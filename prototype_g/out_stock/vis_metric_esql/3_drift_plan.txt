@@ -1,0 +1,452 @@
+
+Warning: Provider development overrides are in effect
+
+The following provider development overrides are set in the CLI
+configuration:
+ - elastic/elasticstack in /Users/nickpeihl/Development/Elastic/terraform-provider-elasticstack-worktrees/dashboards-tf-g/prototype_g/out_stock/bin
+
+The behavior may therefore not match any released version of the provider and
+applying changes may cause the state to become incompatible with published
+releases.
+
+Error: Invalid vis panel configuration
+
+  with elasticstack_kibana_dashboard.this,
+  on generated.tf line 20, in resource "elasticstack_kibana_dashboard" "this":
+  20:     {
+  21:       aiops_change_point_chart_config = null
+  22:       aiops_log_rate_analysis_config  = null
+  23:       aiops_pattern_analysis_config   = null
+  24:       apm_service_map_config          = null
+  25:       config_json = jsonencode({
+  26:         data_source = {
+  27:           query = "FROM kibana_sample_data_logs | WHERE timestamp >= ?_tstart AND timestamp < ?_tend | STATS avg_bytes = AVG(bytes)"
+  28:           type  = "esql"
+  29:         }
+  30:         description = "ESQL Metric with trend background chart"
+  31:         metrics = [{
+  32:           background_chart = {
+  33:             type = "trend"
+  34:           }
+  35:           column = "avg_bytes"
+  36:           type   = "primary"
+  37:         }]
+  38:         title = "Metric - ESQL with trendline"
+  39:         type  = "metric"
+  40:       })
+  41:       discover_session_config  = null
+  42:       esql_control_config      = null
+  43:       field_stats_table_config = null
+  44:       grid = {
+  45:         h = 6
+  46:         w = 12
+  47:         x = 0
+  48:         y = 0
+  49:       }
+  50:       image_config                     = null
+  51:       links_config                     = null
+  52:       markdown_config                  = null
+  53:       ml_anomaly_charts_config         = null
+  54:       ml_anomaly_swimlane_config       = null
+  55:       ml_single_metric_viewer_config   = null
+  56:       options_list_control_config      = null
+  57:       range_slider_control_config      = null
+  58:       slo_alerts_config                = null
+  59:       slo_burn_rate_config             = null
+  60:       slo_error_budget_config          = null
+  61:       slo_overview_config              = null
+  62:       synthetics_monitors_config       = null
+  63:       synthetics_stats_overview_config = null
+  64:       time_slider_control_config       = null
+  65:       type                             = "vis"
+  66:       vis_config = {
+  67:         by_reference = null
+  68:         by_value = {
+  69:           datatable_config     = null
+  70:           gauge_config         = null
+  71:           heatmap_config       = null
+  72:           legacy_metric_config = null
+  73:           metric_chart_config = {
+  74:             breakdown_by_json = null
+  75:             data_source_json = jsonencode({
+  76:               query = "FROM kibana_sample_data_logs | WHERE timestamp >= ?_tstart AND timestamp < ?_tend | STATS avg_bytes = AVG(bytes)"
+  77:               type  = "esql"
+  78:             })
+  79:             description = "ESQL Metric with trend background chart"
+  80:             drilldowns  = null
+  81:             filters     = null
+  82:             hide_border = null
+  83:             hide_title  = null
+  84:             metrics = [
+  85:               {
+  86:                 config_json = jsonencode({
+  87:                   background_chart = {
+  88:                     type = "trend"
+  89:                   }
+  90:                   column = "avg_bytes"
+  91:                   type   = "primary"
+  92:                 })
+  93:               },
+  94:             ]
+  95:             query           = null
+  96:             references_json = null
+  97:             time_range      = null
+  98:             title           = "Metric - ESQL with trendline"
+  99:           }
+ 100:           mosaic_config     = null
+ 101:           pie_chart_config  = null
+ 102:           region_map_config = null
+ 103:           tagcloud_config   = null
+ 104:           treemap_config    = null
+ 105:           waffle_config     = null
+ 106:           xy_chart_config   = null
+ 107:         }
+ 108:       }
+ 109:     },
+
+Panels with `type = "vis"` require exactly one of `vis_config`, panel-level
+`config_json`.
+
+Error: Invalid Attribute Combination
+
+  with elasticstack_kibana_dashboard.this,
+  on generated.tf line 25, in resource "elasticstack_kibana_dashboard" "this":
+  25:       config_json = jsonencode({
+  26:         data_source = {
+  27:           query = "FROM kibana_sample_data_logs | WHERE timestamp >= ?_tstart AND timestamp < ?_tend | STATS avg_bytes = AVG(bytes)"
+  28:           type  = "esql"
+  29:         }
+  30:         description = "ESQL Metric with trend background chart"
+  31:         metrics = [{
+  32:           background_chart = {
+  33:             type = "trend"
+  34:           }
+  35:           column = "avg_bytes"
+  36:           type   = "primary"
+  37:         }]
+  38:         title = "Metric - ESQL with trendline"
+  39:         type  = "metric"
+  40:       })
+
+Attribute "panels[0].vis_config" cannot be specified when
+"panels[0].config_json" is specified
+
+Error: Invalid Attribute Combination
+
+  with elasticstack_kibana_dashboard.this,
+  on generated.tf line 66, in resource "elasticstack_kibana_dashboard" "this":
+  66:       vis_config = {
+  67:         by_reference = null
+  68:         by_value = {
+  69:           datatable_config     = null
+  70:           gauge_config         = null
+  71:           heatmap_config       = null
+  72:           legacy_metric_config = null
+  73:           metric_chart_config = {
+  74:             breakdown_by_json = null
+  75:             data_source_json = jsonencode({
+  76:               query = "FROM kibana_sample_data_logs | WHERE timestamp >= ?_tstart AND timestamp < ?_tend | STATS avg_bytes = AVG(bytes)"
+  77:               type  = "esql"
+  78:             })
+  79:             description = "ESQL Metric with trend background chart"
+  80:             drilldowns  = null
+  81:             filters     = null
+  82:             hide_border = null
+  83:             hide_title  = null
+  84:             metrics = [
+  85:               {
+  86:                 config_json = jsonencode({
+  87:                   background_chart = {
+  88:                     type = "trend"
+  89:                   }
+  90:                   column = "avg_bytes"
+  91:                   type   = "primary"
+  92:                 })
+  93:               },
+  94:             ]
+  95:             query           = null
+  96:             references_json = null
+  97:             time_range      = null
+  98:             title           = "Metric - ESQL with trendline"
+  99:           }
+ 100:           mosaic_config     = null
+ 101:           pie_chart_config  = null
+ 102:           region_map_config = null
+ 103:           tagcloud_config   = null
+ 104:           treemap_config    = null
+ 105:           waffle_config     = null
+ 106:           xy_chart_config   = null
+ 107:         }
+ 108:       }
+
+Attribute "panels[0].config_json" cannot be specified when
+"panels[0].vis_config" is specified
+
+Error: Invalid vis panel configuration
+
+  with elasticstack_kibana_dashboard.this,
+  on generated.tf line 110, in resource "elasticstack_kibana_dashboard" "this":
+ 110:     {
+ 111:       aiops_change_point_chart_config = null
+ 112:       aiops_log_rate_analysis_config  = null
+ 113:       aiops_pattern_analysis_config   = null
+ 114:       apm_service_map_config          = null
+ 115:       config_json = jsonencode({
+ 116:         breakdown_by = {
+ 117:           column = "extension.keyword"
+ 118:         }
+ 119:         data_source = {
+ 120:           query = "FROM logs | STATS ..."
+ 121:           type  = "esql"
+ 122:         }
+ 123:         description = "ESQL Metric with background chart and breakdown"
+ 124:         metrics = [{
+ 125:           background_chart = {
+ 126:             max_value = {
+ 127:               column = "bytes"
+ 128:             }
+ 129:             type = "bar"
+ 130:           }
+ 131:           color = {
+ 132:             range = "absolute"
+ 133:             steps = [{
+ 134:               color = "red"
+ 135:               lt    = 0
+ 136:             }]
+ 137:             type = "dynamic"
+ 138:           }
+ 139:           column = "count"
+ 140:           type   = "primary"
+ 141:           }, {
+ 142:           column = "bytes"
+ 143:           compare = {
+ 144:             baseline = 100
+ 145:             palette  = "status"
+ 146:             to       = "baseline"
+ 147:             value    = false
+ 148:           }
+ 149:           type = "secondary"
+ 150:         }]
+ 151:         title = "Metric - ESQL Complex case"
+ 152:         type  = "metric"
+ 153:       })
+ 154:       discover_session_config  = null
+ 155:       esql_control_config      = null
+ 156:       field_stats_table_config = null
+ 157:       grid = {
+ 158:         h = 6
+ 159:         w = 12
+ 160:         x = 12
+ 161:         y = 0
+ 162:       }
+ 163:       image_config                     = null
+ 164:       links_config                     = null
+ 165:       markdown_config                  = null
+ 166:       ml_anomaly_charts_config         = null
+ 167:       ml_anomaly_swimlane_config       = null
+ 168:       ml_single_metric_viewer_config   = null
+ 169:       options_list_control_config      = null
+ 170:       range_slider_control_config      = null
+ 171:       slo_alerts_config                = null
+ 172:       slo_burn_rate_config             = null
+ 173:       slo_error_budget_config          = null
+ 174:       slo_overview_config              = null
+ 175:       synthetics_monitors_config       = null
+ 176:       synthetics_stats_overview_config = null
+ 177:       time_slider_control_config       = null
+ 178:       type                             = "vis"
+ 179:       vis_config = {
+ 180:         by_reference = null
+ 181:         by_value = {
+ 182:           datatable_config     = null
+ 183:           gauge_config         = null
+ 184:           heatmap_config       = null
+ 185:           legacy_metric_config = null
+ 186:           metric_chart_config = {
+ 187:             breakdown_by_json = jsonencode({
+ 188:               column = "extension.keyword"
+ 189:             })
+ 190:             data_source_json = jsonencode({
+ 191:               query = "FROM logs | STATS ..."
+ 192:               type  = "esql"
+ 193:             })
+ 194:             description = "ESQL Metric with background chart and breakdown"
+ 195:             drilldowns  = null
+ 196:             filters     = null
+ 197:             hide_border = null
+ 198:             hide_title  = null
+ 199:             metrics = [
+ 200:               {
+ 201:                 config_json = jsonencode({
+ 202:                   background_chart = {
+ 203:                     max_value = {
+ 204:                       column = "bytes"
+ 205:                     }
+ 206:                     type = "bar"
+ 207:                   }
+ 208:                   color = {
+ 209:                     range = "absolute"
+ 210:                     steps = [{
+ 211:                       color = "red"
+ 212:                       lt    = 0
+ 213:                     }]
+ 214:                     type = "dynamic"
+ 215:                   }
+ 216:                   column = "count"
+ 217:                   type   = "primary"
+ 218:                 })
+ 219:               },
+ 220:               {
+ 221:                 config_json = jsonencode({
+ 222:                   column = "bytes"
+ 223:                   compare = {
+ 224:                     baseline = 100
+ 225:                     palette  = "status"
+ 226:                     to       = "baseline"
+ 227:                     value    = false
+ 228:                   }
+ 229:                   type = "secondary"
+ 230:                 })
+ 231:               },
+ 232:             ]
+ 233:             query           = null
+ 234:             references_json = null
+ 235:             time_range      = null
+ 236:             title           = "Metric - ESQL Complex case"
+ 237:           }
+ 238:           mosaic_config     = null
+ 239:           pie_chart_config  = null
+ 240:           region_map_config = null
+ 241:           tagcloud_config   = null
+ 242:           treemap_config    = null
+ 243:           waffle_config     = null
+ 244:           xy_chart_config   = null
+ 245:         }
+ 246:       }
+ 247:     },
+
+Panels with `type = "vis"` require exactly one of `vis_config`, panel-level
+`config_json`.
+
+Error: Invalid Attribute Combination
+
+  with elasticstack_kibana_dashboard.this,
+  on generated.tf line 115, in resource "elasticstack_kibana_dashboard" "this":
+ 115:       config_json = jsonencode({
+ 116:         breakdown_by = {
+ 117:           column = "extension.keyword"
+ 118:         }
+ 119:         data_source = {
+ 120:           query = "FROM logs | STATS ..."
+ 121:           type  = "esql"
+ 122:         }
+ 123:         description = "ESQL Metric with background chart and breakdown"
+ 124:         metrics = [{
+ 125:           background_chart = {
+ 126:             max_value = {
+ 127:               column = "bytes"
+ 128:             }
+ 129:             type = "bar"
+ 130:           }
+ 131:           color = {
+ 132:             range = "absolute"
+ 133:             steps = [{
+ 134:               color = "red"
+ 135:               lt    = 0
+ 136:             }]
+ 137:             type = "dynamic"
+ 138:           }
+ 139:           column = "count"
+ 140:           type   = "primary"
+ 141:           }, {
+ 142:           column = "bytes"
+ 143:           compare = {
+ 144:             baseline = 100
+ 145:             palette  = "status"
+ 146:             to       = "baseline"
+ 147:             value    = false
+ 148:           }
+ 149:           type = "secondary"
+ 150:         }]
+ 151:         title = "Metric - ESQL Complex case"
+ 152:         type  = "metric"
+ 153:       })
+
+Attribute "panels[1].vis_config" cannot be specified when
+"panels[1].config_json" is specified
+
+Error: Invalid Attribute Combination
+
+  with elasticstack_kibana_dashboard.this,
+  on generated.tf line 179, in resource "elasticstack_kibana_dashboard" "this":
+ 179:       vis_config = {
+ 180:         by_reference = null
+ 181:         by_value = {
+ 182:           datatable_config     = null
+ 183:           gauge_config         = null
+ 184:           heatmap_config       = null
+ 185:           legacy_metric_config = null
+ 186:           metric_chart_config = {
+ 187:             breakdown_by_json = jsonencode({
+ 188:               column = "extension.keyword"
+ 189:             })
+ 190:             data_source_json = jsonencode({
+ 191:               query = "FROM logs | STATS ..."
+ 192:               type  = "esql"
+ 193:             })
+ 194:             description = "ESQL Metric with background chart and breakdown"
+ 195:             drilldowns  = null
+ 196:             filters     = null
+ 197:             hide_border = null
+ 198:             hide_title  = null
+ 199:             metrics = [
+ 200:               {
+ 201:                 config_json = jsonencode({
+ 202:                   background_chart = {
+ 203:                     max_value = {
+ 204:                       column = "bytes"
+ 205:                     }
+ 206:                     type = "bar"
+ 207:                   }
+ 208:                   color = {
+ 209:                     range = "absolute"
+ 210:                     steps = [{
+ 211:                       color = "red"
+ 212:                       lt    = 0
+ 213:                     }]
+ 214:                     type = "dynamic"
+ 215:                   }
+ 216:                   column = "count"
+ 217:                   type   = "primary"
+ 218:                 })
+ 219:               },
+ 220:               {
+ 221:                 config_json = jsonencode({
+ 222:                   column = "bytes"
+ 223:                   compare = {
+ 224:                     baseline = 100
+ 225:                     palette  = "status"
+ 226:                     to       = "baseline"
+ 227:                     value    = false
+ 228:                   }
+ 229:                   type = "secondary"
+ 230:                 })
+ 231:               },
+ 232:             ]
+ 233:             query           = null
+ 234:             references_json = null
+ 235:             time_range      = null
+ 236:             title           = "Metric - ESQL Complex case"
+ 237:           }
+ 238:           mosaic_config     = null
+ 239:           pie_chart_config  = null
+ 240:           region_map_config = null
+ 241:           tagcloud_config   = null
+ 242:           treemap_config    = null
+ 243:           waffle_config     = null
+ 244:           xy_chart_config   = null
+ 245:         }
+ 246:       }
+
+Attribute "panels[1].config_json" cannot be specified when
+"panels[1].vis_config" is specified

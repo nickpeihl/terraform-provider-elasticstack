@@ -1,0 +1,874 @@
+
+Warning: Provider development overrides are in effect
+
+The following provider development overrides are set in the CLI
+configuration:
+ - elastic/elasticstack in /Users/nickpeihl/Development/Elastic/terraform-provider-elasticstack-worktrees/dashboards-tf-g/prototype_g/out_fwgen/bin
+
+The behavior may therefore not match any released version of the provider and
+applying changes may cause the state to become incompatible with published
+releases.
+
+Error: Invalid vis panel configuration
+
+  with elasticstack_kibana_dashboard.this,
+  on generated.tf line 57, in resource "elasticstack_kibana_dashboard" "this":
+  57:         {
+  58:           aiops_change_point_chart_config = null
+  59:           aiops_log_rate_analysis_config  = null
+  60:           aiops_pattern_analysis_config   = null
+  61:           apm_service_map_config          = null
+  62:           config_json = jsonencode({
+  63:             data_source = {
+  64:               index_pattern = "kibana_sample_data_logs"
+  65:               time_field    = "timestamp"
+  66:               type          = "data_view_spec"
+  67:             }
+  68:             metrics = [{
+  69:               operation = "count"
+  70:               type      = "primary"
+  71:             }]
+  72:             type = "metric"
+  73:           })
+  74:           discover_session_config  = null
+  75:           esql_control_config      = null
+  76:           field_stats_table_config = null
+  77:           grid = {
+  78:             h = 5
+  79:             w = 12
+  80:             x = 0
+  81:             y = 0
+  82:           }
+  83:           image_config                     = null
+  84:           links_config                     = null
+  85:           markdown_config                  = null
+  86:           ml_anomaly_charts_config         = null
+  87:           ml_anomaly_swimlane_config       = null
+  88:           ml_single_metric_viewer_config   = null
+  89:           options_list_control_config      = null
+  90:           range_slider_control_config      = null
+  91:           slo_alerts_config                = null
+  92:           slo_burn_rate_config             = null
+  93:           slo_error_budget_config          = null
+  94:           slo_overview_config              = null
+  95:           synthetics_monitors_config       = null
+  96:           synthetics_stats_overview_config = null
+  97:           time_slider_control_config       = null
+  98:           type                             = "vis"
+  99:           vis_config = {
+ 100:             by_reference = null
+ 101:             by_value = {
+ 102:               datatable_config     = null
+ 103:               gauge_config         = null
+ 104:               heatmap_config       = null
+ 105:               legacy_metric_config = null
+ 106:               metric_chart_config = {
+ 107:                 breakdown_by_json = null
+ 108:                 data_source_json = jsonencode({
+ 109:                   index_pattern = "kibana_sample_data_logs"
+ 110:                   time_field    = "timestamp"
+ 111:                   type          = "data_view_spec"
+ 112:                 })
+ 113:                 description = null
+ 114:                 drilldowns  = null
+ 115:                 filters     = null
+ 116:                 hide_border = null
+ 117:                 hide_title  = null
+ 118:                 metrics = [
+ 119:                   {
+ 120:                     config_json = jsonencode({
+ 121:                       operation = "count"
+ 122:                       type      = "primary"
+ 123:                     })
+ 124:                   },
+ 125:                 ]
+ 126:                 query = {
+ 127:                   expression = ""
+ 128:                   language   = "kql"
+ 129:                 }
+ 130:                 references_json = null
+ 131:                 time_range      = null
+ 132:                 title           = null
+ 133:               }
+ 134:               mosaic_config     = null
+ 135:               pie_chart_config  = null
+ 136:               region_map_config = null
+ 137:               tagcloud_config   = null
+ 138:               treemap_config    = null
+ 139:               waffle_config     = null
+ 140:               xy_chart_config   = null
+ 141:             }
+ 142:           }
+ 143:         },
+
+Panels with `type = "vis"` require exactly one of `vis_config`, panel-level
+`config_json`.
+
+Error: Invalid Attribute Combination
+
+  with elasticstack_kibana_dashboard.this,
+  on generated.tf line 62, in resource "elasticstack_kibana_dashboard" "this":
+  62:           config_json = jsonencode({
+  63:             data_source = {
+  64:               index_pattern = "kibana_sample_data_logs"
+  65:               time_field    = "timestamp"
+  66:               type          = "data_view_spec"
+  67:             }
+  68:             metrics = [{
+  69:               operation = "count"
+  70:               type      = "primary"
+  71:             }]
+  72:             type = "metric"
+  73:           })
+
+Attribute "sections[0].panels[0].vis_config" cannot be specified when
+"sections[0].panels[0].config_json" is specified
+
+Error: Invalid Attribute Combination
+
+  with elasticstack_kibana_dashboard.this,
+  on generated.tf line 99, in resource "elasticstack_kibana_dashboard" "this":
+  99:           vis_config = {
+ 100:             by_reference = null
+ 101:             by_value = {
+ 102:               datatable_config     = null
+ 103:               gauge_config         = null
+ 104:               heatmap_config       = null
+ 105:               legacy_metric_config = null
+ 106:               metric_chart_config = {
+ 107:                 breakdown_by_json = null
+ 108:                 data_source_json = jsonencode({
+ 109:                   index_pattern = "kibana_sample_data_logs"
+ 110:                   time_field    = "timestamp"
+ 111:                   type          = "data_view_spec"
+ 112:                 })
+ 113:                 description = null
+ 114:                 drilldowns  = null
+ 115:                 filters     = null
+ 116:                 hide_border = null
+ 117:                 hide_title  = null
+ 118:                 metrics = [
+ 119:                   {
+ 120:                     config_json = jsonencode({
+ 121:                       operation = "count"
+ 122:                       type      = "primary"
+ 123:                     })
+ 124:                   },
+ 125:                 ]
+ 126:                 query = {
+ 127:                   expression = ""
+ 128:                   language   = "kql"
+ 129:                 }
+ 130:                 references_json = null
+ 131:                 time_range      = null
+ 132:                 title           = null
+ 133:               }
+ 134:               mosaic_config     = null
+ 135:               pie_chart_config  = null
+ 136:               region_map_config = null
+ 137:               tagcloud_config   = null
+ 138:               treemap_config    = null
+ 139:               waffle_config     = null
+ 140:               xy_chart_config   = null
+ 141:             }
+ 142:           }
+
+Attribute "sections[0].panels[0].config_json" cannot be specified when
+"sections[0].panels[0].vis_config" is specified
+
+Error: Invalid vis panel configuration
+
+  with elasticstack_kibana_dashboard.this,
+  on generated.tf line 144, in resource "elasticstack_kibana_dashboard" "this":
+ 144:         {
+ 145:           aiops_change_point_chart_config = null
+ 146:           aiops_log_rate_analysis_config  = null
+ 147:           aiops_pattern_analysis_config   = null
+ 148:           apm_service_map_config          = null
+ 149:           config_json = jsonencode({
+ 150:             data_source = {
+ 151:               index_pattern = "kibana_sample_data_logs"
+ 152:               time_field    = "timestamp"
+ 153:               type          = "data_view_spec"
+ 154:             }
+ 155:             metrics = [{
+ 156:               field     = "bytes"
+ 157:               operation = "average"
+ 158:               type      = "primary"
+ 159:             }]
+ 160:             type = "metric"
+ 161:           })
+ 162:           discover_session_config  = null
+ 163:           esql_control_config      = null
+ 164:           field_stats_table_config = null
+ 165:           grid = {
+ 166:             h = 5
+ 167:             w = 12
+ 168:             x = 12
+ 169:             y = 0
+ 170:           }
+ 171:           image_config                     = null
+ 172:           links_config                     = null
+ 173:           markdown_config                  = null
+ 174:           ml_anomaly_charts_config         = null
+ 175:           ml_anomaly_swimlane_config       = null
+ 176:           ml_single_metric_viewer_config   = null
+ 177:           options_list_control_config      = null
+ 178:           range_slider_control_config      = null
+ 179:           slo_alerts_config                = null
+ 180:           slo_burn_rate_config             = null
+ 181:           slo_error_budget_config          = null
+ 182:           slo_overview_config              = null
+ 183:           synthetics_monitors_config       = null
+ 184:           synthetics_stats_overview_config = null
+ 185:           time_slider_control_config       = null
+ 186:           type                             = "vis"
+ 187:           vis_config = {
+ 188:             by_reference = null
+ 189:             by_value = {
+ 190:               datatable_config     = null
+ 191:               gauge_config         = null
+ 192:               heatmap_config       = null
+ 193:               legacy_metric_config = null
+ 194:               metric_chart_config = {
+ 195:                 breakdown_by_json = null
+ 196:                 data_source_json = jsonencode({
+ 197:                   index_pattern = "kibana_sample_data_logs"
+ 198:                   time_field    = "timestamp"
+ 199:                   type          = "data_view_spec"
+ 200:                 })
+ 201:                 description = null
+ 202:                 drilldowns  = null
+ 203:                 filters     = null
+ 204:                 hide_border = null
+ 205:                 hide_title  = null
+ 206:                 metrics = [
+ 207:                   {
+ 208:                     config_json = jsonencode({
+ 209:                       field     = "bytes"
+ 210:                       operation = "average"
+ 211:                       type      = "primary"
+ 212:                     })
+ 213:                   },
+ 214:                 ]
+ 215:                 query = {
+ 216:                   expression = ""
+ 217:                   language   = "kql"
+ 218:                 }
+ 219:                 references_json = null
+ 220:                 time_range      = null
+ 221:                 title           = null
+ 222:               }
+ 223:               mosaic_config     = null
+ 224:               pie_chart_config  = null
+ 225:               region_map_config = null
+ 226:               tagcloud_config   = null
+ 227:               treemap_config    = null
+ 228:               waffle_config     = null
+ 229:               xy_chart_config   = null
+ 230:             }
+ 231:           }
+ 232:         },
+
+Panels with `type = "vis"` require exactly one of `vis_config`, panel-level
+`config_json`.
+
+Error: Invalid Attribute Combination
+
+  with elasticstack_kibana_dashboard.this,
+  on generated.tf line 149, in resource "elasticstack_kibana_dashboard" "this":
+ 149:           config_json = jsonencode({
+ 150:             data_source = {
+ 151:               index_pattern = "kibana_sample_data_logs"
+ 152:               time_field    = "timestamp"
+ 153:               type          = "data_view_spec"
+ 154:             }
+ 155:             metrics = [{
+ 156:               field     = "bytes"
+ 157:               operation = "average"
+ 158:               type      = "primary"
+ 159:             }]
+ 160:             type = "metric"
+ 161:           })
+
+Attribute "sections[0].panels[1].vis_config" cannot be specified when
+"sections[0].panels[1].config_json" is specified
+
+Error: Invalid Attribute Combination
+
+  with elasticstack_kibana_dashboard.this,
+  on generated.tf line 187, in resource "elasticstack_kibana_dashboard" "this":
+ 187:           vis_config = {
+ 188:             by_reference = null
+ 189:             by_value = {
+ 190:               datatable_config     = null
+ 191:               gauge_config         = null
+ 192:               heatmap_config       = null
+ 193:               legacy_metric_config = null
+ 194:               metric_chart_config = {
+ 195:                 breakdown_by_json = null
+ 196:                 data_source_json = jsonencode({
+ 197:                   index_pattern = "kibana_sample_data_logs"
+ 198:                   time_field    = "timestamp"
+ 199:                   type          = "data_view_spec"
+ 200:                 })
+ 201:                 description = null
+ 202:                 drilldowns  = null
+ 203:                 filters     = null
+ 204:                 hide_border = null
+ 205:                 hide_title  = null
+ 206:                 metrics = [
+ 207:                   {
+ 208:                     config_json = jsonencode({
+ 209:                       field     = "bytes"
+ 210:                       operation = "average"
+ 211:                       type      = "primary"
+ 212:                     })
+ 213:                   },
+ 214:                 ]
+ 215:                 query = {
+ 216:                   expression = ""
+ 217:                   language   = "kql"
+ 218:                 }
+ 219:                 references_json = null
+ 220:                 time_range      = null
+ 221:                 title           = null
+ 222:               }
+ 223:               mosaic_config     = null
+ 224:               pie_chart_config  = null
+ 225:               region_map_config = null
+ 226:               tagcloud_config   = null
+ 227:               treemap_config    = null
+ 228:               waffle_config     = null
+ 229:               xy_chart_config   = null
+ 230:             }
+ 231:           }
+
+Attribute "sections[0].panels[1].config_json" cannot be specified when
+"sections[0].panels[1].vis_config" is specified
+
+Error: Invalid vis panel configuration
+
+  with elasticstack_kibana_dashboard.this,
+  on generated.tf line 242, in resource "elasticstack_kibana_dashboard" "this":
+ 242:         {
+ 243:           aiops_change_point_chart_config = null
+ 244:           aiops_log_rate_analysis_config  = null
+ 245:           aiops_pattern_analysis_config   = null
+ 246:           apm_service_map_config          = null
+ 247:           config_json = jsonencode({
+ 248:             axis = {
+ 249:               x = {
+ 250:                 title = {
+ 251:                   visible = false
+ 252:                 }
+ 253:               }
+ 254:             }
+ 255:             layers = [{
+ 256:               data_source = {
+ 257:                 index_pattern = "kibana_sample_data_logs"
+ 258:                 time_field    = "timestamp"
+ 259:                 type          = "data_view_spec"
+ 260:               }
+ 261:               type = "line"
+ 262:               x = {
+ 263:                 field     = "timestamp"
+ 264:                 operation = "date_histogram"
+ 265:               }
+ 266:               y = [{
+ 267:                 operation = "count"
+ 268:               }]
+ 269:             }]
+ 270:             title = "Requests over time"
+ 271:             type  = "xy"
+ 272:           })
+ 273:           discover_session_config  = null
+ 274:           esql_control_config      = null
+ 275:           field_stats_table_config = null
+ 276:           grid = {
+ 277:             h = 10
+ 278:             w = 24
+ 279:             x = 0
+ 280:             y = 0
+ 281:           }
+ 282:           image_config                     = null
+ 283:           links_config                     = null
+ 284:           markdown_config                  = null
+ 285:           ml_anomaly_charts_config         = null
+ 286:           ml_anomaly_swimlane_config       = null
+ 287:           ml_single_metric_viewer_config   = null
+ 288:           options_list_control_config      = null
+ 289:           range_slider_control_config      = null
+ 290:           slo_alerts_config                = null
+ 291:           slo_burn_rate_config             = null
+ 292:           slo_error_budget_config          = null
+ 293:           slo_overview_config              = null
+ 294:           synthetics_monitors_config       = null
+ 295:           synthetics_stats_overview_config = null
+ 296:           time_slider_control_config       = null
+ 297:           type                             = "vis"
+ 298:           vis_config = {
+ 299:             by_reference = null
+ 300:             by_value = {
+ 301:               datatable_config     = null
+ 302:               gauge_config         = null
+ 303:               heatmap_config       = null
+ 304:               legacy_metric_config = null
+ 305:               metric_chart_config  = null
+ 306:               mosaic_config        = null
+ 307:               pie_chart_config     = null
+ 308:               region_map_config    = null
+ 309:               tagcloud_config      = null
+ 310:               treemap_config       = null
+ 311:               waffle_config        = null
+ 312:               xy_chart_config = {
+ 313:                 axis = {
+ 314:                   x = {
+ 315:                     scale = null
+ 316:                     title = {
+ 317:                       value   = null
+ 318:                       visible = false
+ 319:                     }
+ 320:                   }
+ 321:                   y  = null
+ 322:                   y2 = null
+ 323:                 }
+ 324:                 decorations = {
+ 325:                   line_interpolation       = null
+ 326:                   minimum_bar_height       = null
+ 327:                   point_visibility         = null
+ 328:                   show_current_time_marker = null
+ 329:                   show_end_zones           = null
+ 330:                   show_value_labels        = null
+ 331:                 }
+ 332:                 description = null
+ 333:                 drilldowns  = null
+ 334:                 filters     = null
+ 335:                 fitting = {
+ 336:                   dotted    = null
+ 337:                   end_value = null
+ 338:                   type      = null
+ 339:                 }
+ 340:                 hide_border = null
+ 341:                 hide_title  = null
+ 342:                 layers = [
+ 343:                   {
+ 344:                     data_layer = {
+ 345:                       breakdown_by_json = null
+ 346:                       data_source_json = jsonencode({
+ 347:                         index_pattern = "kibana_sample_data_logs"
+ 348:                         time_field    = "timestamp"
+ 349:                         type          = "data_view_spec"
+ 350:                       })
+ 351:                       x_json = jsonencode({
+ 352:                         field     = "timestamp"
+ 353:                         operation = "date_histogram"
+ 354:                       })
+ 355:                       y = [
+ 356:                         {
+ 357:                           config_json = jsonencode({
+ 358:                             operation = "count"
+ 359:                           })
+ 360:                         },
+ 361:                       ]
+ 362:                     }
+ 363:                     reference_line_layer = null
+ 364:                     type                 = "line"
+ 365:                   },
+ 366:                 ]
+ 367:                 legend = null
+ 368:                 query = {
+ 369:                   expression = ""
+ 370:                   language   = "kql"
+ 371:                 }
+ 372:                 references_json = null
+ 373:                 time_range      = null
+ 374:                 title           = "Requests over time"
+ 375:               }
+ 376:             }
+ 377:           }
+ 378:         },
+
+Panels with `type = "vis"` require exactly one of `vis_config`, panel-level
+`config_json`.
+
+Error: Invalid Attribute Combination
+
+  with elasticstack_kibana_dashboard.this,
+  on generated.tf line 247, in resource "elasticstack_kibana_dashboard" "this":
+ 247:           config_json = jsonencode({
+ 248:             axis = {
+ 249:               x = {
+ 250:                 title = {
+ 251:                   visible = false
+ 252:                 }
+ 253:               }
+ 254:             }
+ 255:             layers = [{
+ 256:               data_source = {
+ 257:                 index_pattern = "kibana_sample_data_logs"
+ 258:                 time_field    = "timestamp"
+ 259:                 type          = "data_view_spec"
+ 260:               }
+ 261:               type = "line"
+ 262:               x = {
+ 263:                 field     = "timestamp"
+ 264:                 operation = "date_histogram"
+ 265:               }
+ 266:               y = [{
+ 267:                 operation = "count"
+ 268:               }]
+ 269:             }]
+ 270:             title = "Requests over time"
+ 271:             type  = "xy"
+ 272:           })
+
+Attribute "sections[1].panels[0].vis_config" cannot be specified when
+"sections[1].panels[0].config_json" is specified
+
+Error: Invalid Attribute Combination
+
+  with elasticstack_kibana_dashboard.this,
+  on generated.tf line 298, in resource "elasticstack_kibana_dashboard" "this":
+ 298:           vis_config = {
+ 299:             by_reference = null
+ 300:             by_value = {
+ 301:               datatable_config     = null
+ 302:               gauge_config         = null
+ 303:               heatmap_config       = null
+ 304:               legacy_metric_config = null
+ 305:               metric_chart_config  = null
+ 306:               mosaic_config        = null
+ 307:               pie_chart_config     = null
+ 308:               region_map_config    = null
+ 309:               tagcloud_config      = null
+ 310:               treemap_config       = null
+ 311:               waffle_config        = null
+ 312:               xy_chart_config = {
+ 313:                 axis = {
+ 314:                   x = {
+ 315:                     scale = null
+ 316:                     title = {
+ 317:                       value   = null
+ 318:                       visible = false
+ 319:                     }
+ 320:                   }
+ 321:                   y  = null
+ 322:                   y2 = null
+ 323:                 }
+ 324:                 decorations = {
+ 325:                   line_interpolation       = null
+ 326:                   minimum_bar_height       = null
+ 327:                   point_visibility         = null
+ 328:                   show_current_time_marker = null
+ 329:                   show_end_zones           = null
+ 330:                   show_value_labels        = null
+ 331:                 }
+ 332:                 description = null
+ 333:                 drilldowns  = null
+ 334:                 filters     = null
+ 335:                 fitting = {
+ 336:                   dotted    = null
+ 337:                   end_value = null
+ 338:                   type      = null
+ 339:                 }
+ 340:                 hide_border = null
+ 341:                 hide_title  = null
+ 342:                 layers = [
+ 343:                   {
+ 344:                     data_layer = {
+ 345:                       breakdown_by_json = null
+ 346:                       data_source_json = jsonencode({
+ 347:                         index_pattern = "kibana_sample_data_logs"
+ 348:                         time_field    = "timestamp"
+ 349:                         type          = "data_view_spec"
+ 350:                       })
+ 351:                       x_json = jsonencode({
+ 352:                         field     = "timestamp"
+ 353:                         operation = "date_histogram"
+ 354:                       })
+ 355:                       y = [
+ 356:                         {
+ 357:                           config_json = jsonencode({
+ 358:                             operation = "count"
+ 359:                           })
+ 360:                         },
+ 361:                       ]
+ 362:                     }
+ 363:                     reference_line_layer = null
+ 364:                     type                 = "line"
+ 365:                   },
+ 366:                 ]
+ 367:                 legend = null
+ 368:                 query = {
+ 369:                   expression = ""
+ 370:                   language   = "kql"
+ 371:                 }
+ 372:                 references_json = null
+ 373:                 time_range      = null
+ 374:                 title           = "Requests over time"
+ 375:               }
+ 376:             }
+ 377:           }
+
+Attribute "sections[1].panels[0].config_json" cannot be specified when
+"sections[1].panels[0].vis_config" is specified
+
+Error: Invalid vis panel configuration
+
+  with elasticstack_kibana_dashboard.this,
+  on generated.tf line 379, in resource "elasticstack_kibana_dashboard" "this":
+ 379:         {
+ 380:           aiops_change_point_chart_config = null
+ 381:           aiops_log_rate_analysis_config  = null
+ 382:           aiops_pattern_analysis_config   = null
+ 383:           apm_service_map_config          = null
+ 384:           config_json = jsonencode({
+ 385:             axis = {
+ 386:               x = {
+ 387:                 title = {
+ 388:                   visible = false
+ 389:                 }
+ 390:               }
+ 391:             }
+ 392:             layers = [{
+ 393:               data_source = {
+ 394:                 query = "FROM kibana_sample_data_logs | STATS count = COUNT() BY BUCKET(@timestamp, 75, ?_tstart, ?_tend)"
+ 395:                 type  = "esql"
+ 396:               }
+ 397:               type = "line"
+ 398:               x = {
+ 399:                 column = "BUCKET(@timestamp, 75, ?_tstart, ?_tend)"
+ 400:               }
+ 401:               y = [{
+ 402:                 column = "count"
+ 403:               }]
+ 404:             }]
+ 405:             title = "Requests over time (ES|QL)"
+ 406:             type  = "xy"
+ 407:           })
+ 408:           discover_session_config  = null
+ 409:           esql_control_config      = null
+ 410:           field_stats_table_config = null
+ 411:           grid = {
+ 412:             h = 10
+ 413:             w = 24
+ 414:             x = 24
+ 415:             y = 0
+ 416:           }
+ 417:           image_config                     = null
+ 418:           links_config                     = null
+ 419:           markdown_config                  = null
+ 420:           ml_anomaly_charts_config         = null
+ 421:           ml_anomaly_swimlane_config       = null
+ 422:           ml_single_metric_viewer_config   = null
+ 423:           options_list_control_config      = null
+ 424:           range_slider_control_config      = null
+ 425:           slo_alerts_config                = null
+ 426:           slo_burn_rate_config             = null
+ 427:           slo_error_budget_config          = null
+ 428:           slo_overview_config              = null
+ 429:           synthetics_monitors_config       = null
+ 430:           synthetics_stats_overview_config = null
+ 431:           time_slider_control_config       = null
+ 432:           type                             = "vis"
+ 433:           vis_config = {
+ 434:             by_reference = null
+ 435:             by_value = {
+ 436:               datatable_config     = null
+ 437:               gauge_config         = null
+ 438:               heatmap_config       = null
+ 439:               legacy_metric_config = null
+ 440:               metric_chart_config  = null
+ 441:               mosaic_config        = null
+ 442:               pie_chart_config     = null
+ 443:               region_map_config    = null
+ 444:               tagcloud_config      = null
+ 445:               treemap_config       = null
+ 446:               waffle_config        = null
+ 447:               xy_chart_config = {
+ 448:                 axis = {
+ 449:                   x = {
+ 450:                     scale = null
+ 451:                     title = {
+ 452:                       value   = null
+ 453:                       visible = false
+ 454:                     }
+ 455:                   }
+ 456:                   y  = null
+ 457:                   y2 = null
+ 458:                 }
+ 459:                 decorations = {
+ 460:                   line_interpolation       = null
+ 461:                   minimum_bar_height       = null
+ 462:                   point_visibility         = null
+ 463:                   show_current_time_marker = null
+ 464:                   show_end_zones           = null
+ 465:                   show_value_labels        = null
+ 466:                 }
+ 467:                 description = null
+ 468:                 drilldowns  = null
+ 469:                 filters     = null
+ 470:                 fitting = {
+ 471:                   dotted    = null
+ 472:                   end_value = null
+ 473:                   type      = null
+ 474:                 }
+ 475:                 hide_border = null
+ 476:                 hide_title  = null
+ 477:                 layers = [
+ 478:                   {
+ 479:                     data_layer = {
+ 480:                       breakdown_by_json = null
+ 481:                       data_source_json = jsonencode({
+ 482:                         query = "FROM kibana_sample_data_logs | STATS count = COUNT() BY BUCKET(@timestamp, 75, ?_tstart, ?_tend)"
+ 483:                         type  = "esql"
+ 484:                       })
+ 485:                       x_json = jsonencode({
+ 486:                         column = "BUCKET(@timestamp, 75, ?_tstart, ?_tend)"
+ 487:                       })
+ 488:                       y = [
+ 489:                         {
+ 490:                           config_json = jsonencode({
+ 491:                             column = "count"
+ 492:                           })
+ 493:                         },
+ 494:                       ]
+ 495:                     }
+ 496:                     reference_line_layer = null
+ 497:                     type                 = "line"
+ 498:                   },
+ 499:                 ]
+ 500:                 legend = null
+ 501:                 query = {
+ 502:                   expression = ""
+ 503:                   language   = "kql"
+ 504:                 }
+ 505:                 references_json = null
+ 506:                 time_range      = null
+ 507:                 title           = "Requests over time (ES|QL)"
+ 508:               }
+ 509:             }
+ 510:           }
+ 511:         },
+
+Panels with `type = "vis"` require exactly one of `vis_config`, panel-level
+`config_json`.
+
+Error: Invalid Attribute Combination
+
+  with elasticstack_kibana_dashboard.this,
+  on generated.tf line 384, in resource "elasticstack_kibana_dashboard" "this":
+ 384:           config_json = jsonencode({
+ 385:             axis = {
+ 386:               x = {
+ 387:                 title = {
+ 388:                   visible = false
+ 389:                 }
+ 390:               }
+ 391:             }
+ 392:             layers = [{
+ 393:               data_source = {
+ 394:                 query = "FROM kibana_sample_data_logs | STATS count = COUNT() BY BUCKET(@timestamp, 75, ?_tstart, ?_tend)"
+ 395:                 type  = "esql"
+ 396:               }
+ 397:               type = "line"
+ 398:               x = {
+ 399:                 column = "BUCKET(@timestamp, 75, ?_tstart, ?_tend)"
+ 400:               }
+ 401:               y = [{
+ 402:                 column = "count"
+ 403:               }]
+ 404:             }]
+ 405:             title = "Requests over time (ES|QL)"
+ 406:             type  = "xy"
+ 407:           })
+
+Attribute "sections[1].panels[1].vis_config" cannot be specified when
+"sections[1].panels[1].config_json" is specified
+
+Error: Invalid Attribute Combination
+
+  with elasticstack_kibana_dashboard.this,
+  on generated.tf line 433, in resource "elasticstack_kibana_dashboard" "this":
+ 433:           vis_config = {
+ 434:             by_reference = null
+ 435:             by_value = {
+ 436:               datatable_config     = null
+ 437:               gauge_config         = null
+ 438:               heatmap_config       = null
+ 439:               legacy_metric_config = null
+ 440:               metric_chart_config  = null
+ 441:               mosaic_config        = null
+ 442:               pie_chart_config     = null
+ 443:               region_map_config    = null
+ 444:               tagcloud_config      = null
+ 445:               treemap_config       = null
+ 446:               waffle_config        = null
+ 447:               xy_chart_config = {
+ 448:                 axis = {
+ 449:                   x = {
+ 450:                     scale = null
+ 451:                     title = {
+ 452:                       value   = null
+ 453:                       visible = false
+ 454:                     }
+ 455:                   }
+ 456:                   y  = null
+ 457:                   y2 = null
+ 458:                 }
+ 459:                 decorations = {
+ 460:                   line_interpolation       = null
+ 461:                   minimum_bar_height       = null
+ 462:                   point_visibility         = null
+ 463:                   show_current_time_marker = null
+ 464:                   show_end_zones           = null
+ 465:                   show_value_labels        = null
+ 466:                 }
+ 467:                 description = null
+ 468:                 drilldowns  = null
+ 469:                 filters     = null
+ 470:                 fitting = {
+ 471:                   dotted    = null
+ 472:                   end_value = null
+ 473:                   type      = null
+ 474:                 }
+ 475:                 hide_border = null
+ 476:                 hide_title  = null
+ 477:                 layers = [
+ 478:                   {
+ 479:                     data_layer = {
+ 480:                       breakdown_by_json = null
+ 481:                       data_source_json = jsonencode({
+ 482:                         query = "FROM kibana_sample_data_logs | STATS count = COUNT() BY BUCKET(@timestamp, 75, ?_tstart, ?_tend)"
+ 483:                         type  = "esql"
+ 484:                       })
+ 485:                       x_json = jsonencode({
+ 486:                         column = "BUCKET(@timestamp, 75, ?_tstart, ?_tend)"
+ 487:                       })
+ 488:                       y = [
+ 489:                         {
+ 490:                           config_json = jsonencode({
+ 491:                             column = "count"
+ 492:                           })
+ 493:                         },
+ 494:                       ]
+ 495:                     }
+ 496:                     reference_line_layer = null
+ 497:                     type                 = "line"
+ 498:                   },
+ 499:                 ]
+ 500:                 legend = null
+ 501:                 query = {
+ 502:                   expression = ""
+ 503:                   language   = "kql"
+ 504:                 }
+ 505:                 references_json = null
+ 506:                 time_range      = null
+ 507:                 title           = "Requests over time (ES|QL)"
+ 508:               }
+ 509:             }
+ 510:           }
+
+Attribute "sections[1].panels[1].config_json" cannot be specified when
+"sections[1].panels[1].vis_config" is specified

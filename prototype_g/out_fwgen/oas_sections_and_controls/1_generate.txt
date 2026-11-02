@@ -1,0 +1,128 @@
+
+Warning: Provider development overrides are in effect
+
+The following provider development overrides are set in the CLI
+configuration:
+ - elastic/elasticstack in /Users/nickpeihl/Development/Elastic/terraform-provider-elasticstack-worktrees/dashboards-tf-g/prototype_g/out_fwgen/bin
+
+The behavior may therefore not match any released version of the provider and
+applying changes may cause the state to become incompatible with published
+releases.
+elasticstack_kibana_dashboard.this: Preparing import... [id=default/oas_sections_and_controls]
+elasticstack_kibana_dashboard.this: Refreshing state... [id=default/oas_sections_and_controls]
+
+Planning failed. Terraform encountered an error while generating this plan.
+
+
+Warning: Config generation is experimental
+
+Generating configuration during import is currently experimental, and the
+generated configuration format may change in future versions.
+
+Error: Invalid vis panel configuration
+
+  with elasticstack_kibana_dashboard.this,
+  on generated.tf line 52:
+  (source code not available)
+
+Panels with `type = "vis"` require exactly one of `vis_config`, panel-level
+`config_json`.
+
+Error: Invalid Attribute Combination
+
+  with elasticstack_kibana_dashboard.this,
+  on generated.tf line 57:
+  (source code not available)
+
+Attribute "sections[0].panels[0].vis_config" cannot be specified when
+"sections[0].panels[0].config_json" is specified
+
+Error: Invalid Attribute Combination
+
+  with elasticstack_kibana_dashboard.this,
+  on generated.tf line 94:
+  (source code not available)
+
+Attribute "sections[0].panels[0].config_json" cannot be specified when
+"sections[0].panels[0].vis_config" is specified
+
+Error: Invalid vis panel configuration
+
+  with elasticstack_kibana_dashboard.this,
+  on generated.tf line 139:
+  (source code not available)
+
+Panels with `type = "vis"` require exactly one of `vis_config`, panel-level
+`config_json`.
+
+Error: Invalid Attribute Combination
+
+  with elasticstack_kibana_dashboard.this,
+  on generated.tf line 144:
+  (source code not available)
+
+Attribute "sections[0].panels[1].vis_config" cannot be specified when
+"sections[0].panels[1].config_json" is specified
+
+Error: Invalid Attribute Combination
+
+  with elasticstack_kibana_dashboard.this,
+  on generated.tf line 182:
+  (source code not available)
+
+Attribute "sections[0].panels[1].config_json" cannot be specified when
+"sections[0].panels[1].vis_config" is specified
+
+Error: Invalid vis panel configuration
+
+  with elasticstack_kibana_dashboard.this,
+  on generated.tf line 237:
+  (source code not available)
+
+Panels with `type = "vis"` require exactly one of `vis_config`, panel-level
+`config_json`.
+
+Error: Invalid Attribute Combination
+
+  with elasticstack_kibana_dashboard.this,
+  on generated.tf line 242:
+  (source code not available)
+
+Attribute "sections[1].panels[0].vis_config" cannot be specified when
+"sections[1].panels[0].config_json" is specified
+
+Error: Invalid Attribute Combination
+
+  with elasticstack_kibana_dashboard.this,
+  on generated.tf line 293:
+  (source code not available)
+
+Attribute "sections[1].panels[0].config_json" cannot be specified when
+"sections[1].panels[0].vis_config" is specified
+
+Error: Invalid vis panel configuration
+
+  with elasticstack_kibana_dashboard.this,
+  on generated.tf line 374:
+  (source code not available)
+
+Panels with `type = "vis"` require exactly one of `vis_config`, panel-level
+`config_json`.
+
+Error: Invalid Attribute Combination
+
+  with elasticstack_kibana_dashboard.this,
+  on generated.tf line 379:
+  (source code not available)
+
+Attribute "sections[1].panels[1].vis_config" cannot be specified when
+"sections[1].panels[1].config_json" is specified
+
+Error: Invalid Attribute Combination
+
+  with elasticstack_kibana_dashboard.this,
+  on generated.tf line 428:
+  (source code not available)
+
+Attribute "sections[1].panels[1].config_json" cannot be specified when
+"sections[1].panels[1].vis_config" is specified

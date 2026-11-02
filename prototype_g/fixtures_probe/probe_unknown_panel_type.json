@@ -1,0 +1,17 @@
+{
+  "title": "probe unknown panel type",
+  "panels": [
+    {
+      "type": "custom_content",
+      "grid": {
+        "x": 0,
+        "y": 0,
+        "w": 10,
+        "h": 5
+      },
+      "config": {
+        "foo": "bar"
+      }
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "title": "probe unknown field",
+  "future_root_field": {
+    "a": 1
+  },
+  "panels": [
+    {
+      "type": "image",
+      "grid": {
+        "x": 0,
+        "y": 0,
+        "w": 10,
+        "h": 5
+      },
+      "config": {
+        "future_panel_field": true,
+        "image_config": {
+          "src": {
+            "type": "url",
+            "url": "https://x/y.png"
+          }
+        }
+      }
+    }
+  ]
+}

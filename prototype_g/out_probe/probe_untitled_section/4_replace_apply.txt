@@ -1,0 +1,46 @@
+
+Warning: Provider development overrides are in effect
+
+The following provider development overrides are set in the CLI
+configuration:
+ - elastic/elasticstack in /Users/nickpeihl/Development/Elastic/terraform-provider-elasticstack-worktrees/dashboards-tf-g/prototype_g/out_probe/bin
+
+The behavior may therefore not match any released version of the provider and
+applying changes may cause the state to become incompatible with published
+releases.
+elasticstack_kibana_dashboard.this: Refreshing state... [id=default/probe_untitled_section]
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+-/+ destroy and then create replacement
+
+Terraform will perform the following actions:
+
+  # elasticstack_kibana_dashboard.this will be replaced, as requested
+-/+ resource "elasticstack_kibana_dashboard" "this" {
+      ~ id           = "default/probe_untitled_section" -> (known after apply)
+      ~ panels       = [
+          ~ {
+              + config_json = (known after apply)
+              + id          = (known after apply)
+                # (2 unchanged attributes hidden)
+            },
+        ]
+        # (4 unchanged attributes hidden)
+    }
+
+Plan: 1 to add, 0 to change, 1 to destroy.
+elasticstack_kibana_dashboard.this: Destroying... [id=default/probe_untitled_section]
+elasticstack_kibana_dashboard.this: Destruction complete after 0s
+elasticstack_kibana_dashboard.this: Creating...
+
+Error: Unsupported panel type
+
+  with elasticstack_kibana_dashboard.this,
+  on generated.tf line 5, in resource "elasticstack_kibana_dashboard" "this":
+   5: resource "elasticstack_kibana_dashboard" "this" {
+
+Panel type "" is not yet supported. This panel type was preserved from the
+API during read but cannot be authored in configuration. To add support for
+this panel type, wait for a provider update that includes a typed
+configuration block.

@@ -1,0 +1,210 @@
+{
+  "options": {},
+  "panels": [
+    {
+      "collapsed": false,
+      "grid": {
+        "y": 0
+      },
+      "panels": [
+        {
+          "config": {
+            "data_source": {
+              "index_pattern": "kibana_sample_data_logs",
+              "time_field": "timestamp",
+              "type": "data_view_spec"
+            },
+            "filters": [],
+            "metrics": [
+              {
+                "operation": "count",
+                "type": "primary"
+              }
+            ],
+            "query": {
+              "expression": "",
+              "language": "kql"
+            },
+            "type": "metric"
+          },
+          "grid": {
+            "h": 5,
+            "w": 12,
+            "x": 0,
+            "y": 0
+          },
+          "type": "vis"
+        },
+        {
+          "config": {
+            "data_source": {
+              "index_pattern": "kibana_sample_data_logs",
+              "time_field": "timestamp",
+              "type": "data_view_spec"
+            },
+            "filters": [],
+            "metrics": [
+              {
+                "field": "bytes",
+                "operation": "average",
+                "type": "primary"
+              }
+            ],
+            "query": {
+              "expression": "",
+              "language": "kql"
+            },
+            "type": "metric"
+          },
+          "grid": {
+            "h": 5,
+            "w": 12,
+            "x": 12,
+            "y": 0
+          },
+          "type": "vis"
+        }
+      ],
+      "title": "Key metrics"
+    },
+    {
+      "collapsed": false,
+      "grid": {
+        "y": 8
+      },
+      "panels": [
+        {
+          "config": {
+            "axis": {
+              "x": {
+                "title": {
+                  "visible": false
+                }
+              }
+            },
+            "filters": [],
+            "layers": [
+              {
+                "data_source": {
+                  "index_pattern": "kibana_sample_data_logs",
+                  "time_field": "timestamp",
+                  "type": "data_view_spec"
+                },
+                "type": "line",
+                "x": {
+                  "field": "timestamp",
+                  "operation": "date_histogram"
+                },
+                "y": [
+                  {
+                    "operation": "count"
+                  }
+                ]
+              }
+            ],
+            "legend": {
+              "placement": "outside",
+              "position": "bottom",
+              "visibility": "auto"
+            },
+            "query": {
+              "expression": "",
+              "language": "kql"
+            },
+            "styling": {
+              "areas": {},
+              "bars": {},
+              "fitting": {
+                "type": "none"
+              },
+              "overlays": {},
+              "points": {}
+            },
+            "title": "Requests over time",
+            "type": "xy"
+          },
+          "grid": {
+            "h": 10,
+            "w": 24,
+            "x": 0,
+            "y": 0
+          },
+          "type": "vis"
+        },
+        {
+          "config": {
+            "axis": {
+              "x": {
+                "title": {
+                  "visible": false
+                }
+              }
+            },
+            "filters": [],
+            "layers": [
+              {
+                "data_source": {
+                  "query": "FROM kibana_sample_data_logs | STATS count = COUNT() BY BUCKET(@timestamp, 75, ?_tstart, ?_tend)",
+                  "type": "esql"
+                },
+                "type": "line",
+                "x": {
+                  "column": "BUCKET(@timestamp, 75, ?_tstart, ?_tend)"
+                },
+                "y": [
+                  {
+                    "column": "count"
+                  }
+                ]
+              }
+            ],
+            "legend": {
+              "placement": "outside",
+              "position": "bottom",
+              "visibility": "auto"
+            },
+            "styling": {
+              "areas": {},
+              "bars": {},
+              "fitting": {
+                "type": "none"
+              },
+              "overlays": {},
+              "points": {}
+            },
+            "title": "Requests over time (ES|QL)",
+            "type": "xy"
+          },
+          "grid": {
+            "h": 10,
+            "w": 24,
+            "x": 24,
+            "y": 0
+          },
+          "type": "vis"
+        }
+      ],
+      "title": "Traffic trends"
+    }
+  ],
+  "pinned_panels": [
+    {
+      "config": {
+        "data_view_id": "90943e30-9a47-11e8-b64d-95841ca0b247",
+        "field_name": "response.keyword",
+        "search_technique": "prefix",
+        "selected_options": [],
+        "single_select": false,
+        "title": "Response code"
+      },
+      "grow": true,
+      "type": "options_list_control",
+      "width": "medium"
+    }
+  ],
+  "time_range": {
+    "from": "now-7d",
+    "to": "now"
+  },
+  "title": "Operations overview"
+}

@@ -1,0 +1,48 @@
+
+Warning: Provider development overrides are in effect
+
+The following provider development overrides are set in the CLI
+configuration:
+ - elastic/elasticstack in /Users/nickpeihl/Development/Elastic/terraform-provider-elasticstack-worktrees/dashboards-tf-g/prototype_g/out_probe/bin
+
+The behavior may therefore not match any released version of the provider and
+applying changes may cause the state to become incompatible with published
+releases.
+elasticstack_kibana_dashboard.this: Preparing import... [id=default/probe_options_list_nondefault]
+elasticstack_kibana_dashboard.this: Refreshing state... [id=default/probe_options_list_nondefault]
+
+Terraform will perform the following actions:
+
+  # elasticstack_kibana_dashboard.this will be imported
+  # (config will be generated)
+    resource "elasticstack_kibana_dashboard" "this" {
+        dashboard_id  = "probe_options_list_nondefault"
+        id            = "default/probe_options_list_nondefault"
+        options       = {}
+        pinned_panels = [
+            {
+                grow                        = true
+                options_list_control_config = {
+                    by_field = {
+                        data_view_id     = "90943e30-9a47-11e8-b64d-95841ca0b247"
+                        field_name       = "response.keyword"
+                        search_technique = "prefix"
+                        selected_options = []
+                        single_select    = false
+                        title            = "Response code"
+                    }
+                }
+                type                        = "options_list_control"
+                width                       = "medium"
+            },
+        ]
+        space_id      = "default"
+        title         = "probe non-default control values"
+    }
+
+Plan: 1 to import, 0 to add, 0 to change, 0 to destroy.
+
+Warning: Config generation is experimental
+
+Generating configuration during import is currently experimental, and the
+generated configuration format may change in future versions.

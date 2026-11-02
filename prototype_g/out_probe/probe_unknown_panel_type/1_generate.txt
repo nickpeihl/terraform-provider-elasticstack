@@ -1,0 +1,29 @@
+
+Warning: Provider development overrides are in effect
+
+The following provider development overrides are set in the CLI
+configuration:
+ - elastic/elasticstack in /Users/nickpeihl/Development/Elastic/terraform-provider-elasticstack-worktrees/dashboards-tf-g/prototype_g/out_probe/bin
+
+The behavior may therefore not match any released version of the provider and
+applying changes may cause the state to become incompatible with published
+releases.
+elasticstack_kibana_dashboard.this: Preparing import... [id=default/probe_unknown_panel_type]
+elasticstack_kibana_dashboard.this: Refreshing state... [id=default/probe_unknown_panel_type]
+
+Planning failed. Terraform encountered an error while generating this plan.
+
+
+Warning: Config generation is experimental
+
+Generating configuration during import is currently experimental, and the
+generated configuration format may change in future versions.
+
+Error: Invalid Configuration
+
+  with elasticstack_kibana_dashboard.this,
+  on generated.tf line 20:
+  (source code not available)
+
+Attribute panels[0].config_json can only be set when dependent field is one
+of [vis markdown], but dependent field is "custom_content"

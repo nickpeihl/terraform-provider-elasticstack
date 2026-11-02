@@ -1,0 +1,23 @@
+{
+  "options": {},
+  "panels": [
+    {
+      "config": {
+        "image_config": {
+          "src": {
+            "type": "url",
+            "url": "https://x/y.png"
+          }
+        }
+      },
+      "grid": {
+        "h": 5,
+        "w": 10,
+        "x": 0,
+        "y": 0
+      },
+      "type": "image"
+    }
+  ],
+  "title": "probe unknown field"
+}

@@ -1,0 +1,27 @@
+{
+  "title": "probe ${title} %{x}",
+  "panels": [
+    {
+      "type": "markdown",
+      "grid": {
+        "x": 0,
+        "y": 0,
+        "w": 10,
+        "h": 5
+      },
+      "config": {
+        "content": "Hello ${user} %{ if x }y%{ endif }"
+      }
+    }
+  ],
+  "filters": [
+    {
+      "type": "condition",
+      "condition": {
+        "field": "msg",
+        "operator": "is",
+        "value": "${not_a_var}"
+      }
+    }
+  ]
+}

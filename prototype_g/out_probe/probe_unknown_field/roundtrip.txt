@@ -1,0 +1,3 @@
+$.future_root_field: fixture={"a":1} written=undefined
+$.panels[0].config.future_panel_field: fixture=true written=undefined
+$.options: fixture=undefined written={}

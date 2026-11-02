@@ -1,0 +1,62 @@
+
+Warning: Provider development overrides are in effect
+
+The following provider development overrides are set in the CLI
+configuration:
+ - elastic/elasticstack in /Users/nickpeihl/Development/Elastic/terraform-provider-elasticstack-worktrees/dashboards-tf-g/prototype_g/out/bin
+
+The behavior may therefore not match any released version of the provider and
+applying changes may cause the state to become incompatible with published
+releases.
+
+Error: Missing Configuration for Required Attribute
+
+  with elasticstack_kibana_dashboard.this,
+  on generated.tf line 287, in resource "elasticstack_kibana_dashboard" "this":
+ 287:                   type      = null
+
+Must set a configuration value for the
+sections[1].panels[0].vis_config.by_value.xy_chart_config.fitting.type
+attribute as the provider has marked it as required.
+
+Refer to the provider documentation or contact the provider developers for
+additional information about configurable attributes that are required.
+
+Error: Missing Configuration for Required Attribute
+
+  with elasticstack_kibana_dashboard.this,
+  on generated.tf line 316, in resource "elasticstack_kibana_dashboard" "this":
+ 316:                 legend = null
+
+Must set a configuration value for the
+sections[1].panels[0].vis_config.by_value.xy_chart_config.legend attribute as
+the provider has marked it as required.
+
+Refer to the provider documentation or contact the provider developers for
+additional information about configurable attributes that are required.
+
+Error: Missing Configuration for Required Attribute
+
+  with elasticstack_kibana_dashboard.this,
+  on generated.tf line 398, in resource "elasticstack_kibana_dashboard" "this":
+ 398:                   type      = null
+
+Must set a configuration value for the
+sections[1].panels[1].vis_config.by_value.xy_chart_config.fitting.type
+attribute as the provider has marked it as required.
+
+Refer to the provider documentation or contact the provider developers for
+additional information about configurable attributes that are required.
+
+Error: Missing Configuration for Required Attribute
+
+  with elasticstack_kibana_dashboard.this,
+  on generated.tf line 425, in resource "elasticstack_kibana_dashboard" "this":
+ 425:                 legend = null
+
+Must set a configuration value for the
+sections[1].panels[1].vis_config.by_value.xy_chart_config.legend attribute as
+the provider has marked it as required.
+
+Refer to the provider documentation or contact the provider developers for
+additional information about configurable attributes that are required.

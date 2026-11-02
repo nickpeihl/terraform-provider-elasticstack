@@ -1,0 +1,78 @@
+
+Warning: Provider development overrides are in effect
+
+The following provider development overrides are set in the CLI
+configuration:
+ - elastic/elasticstack in /Users/nickpeihl/Development/Elastic/terraform-provider-elasticstack-worktrees/dashboards-tf-g/prototype_g/out_fwgen/bin
+
+The behavior may therefore not match any released version of the provider and
+applying changes may cause the state to become incompatible with published
+releases.
+elasticstack_kibana_dashboard.this: Preparing import... [id=default/pinned_range_slider]
+elasticstack_kibana_dashboard.this: Refreshing state... [id=default/pinned_range_slider]
+
+Terraform will perform the following actions:
+
+  # elasticstack_kibana_dashboard.this will be imported
+  # (config will be generated)
+    resource "elasticstack_kibana_dashboard" "this" {
+        dashboard_id     = "pinned_range_slider"
+        description      = "Dashboard with pinned range slider controls"
+        id               = "default/pinned_range_slider"
+        options          = {}
+        pinned_panels    = [
+            {
+                grow                        = true
+                range_slider_control_config = {
+                    by_field = {
+                        data_view_id       = "spike0-data-view"
+                        field_name         = "source.bytes"
+                        ignore_validations = true
+                        step               = 5
+                        title              = "Bytes Range Updated"
+                        use_global_filters = false
+                        value              = [
+                            "50",
+                            "400",
+                        ]
+                    }
+                }
+                type                        = "range_slider_control"
+                width                       = "medium"
+            },
+            {
+                range_slider_control_config = {
+                    by_esql = {
+                        esql_query         = "FROM logs-* | STATS min = MIN(bytes), max = MAX(bytes)"
+                        ignore_validations = false
+                        step               = 10
+                        title              = "Bytes Range"
+                        use_global_filters = true
+                        values_source      = "esql_query"
+                    }
+                }
+                type                        = "range_slider_control"
+            },
+        ]
+        query            = {
+            expression = ""
+            language   = "kql"
+        }
+        refresh_interval = {
+            pause = true
+            value = 0
+        }
+        space_id         = "default"
+        time_range       = {
+            from = "now-15m"
+            to   = "now"
+        }
+        title            = "Pinned range slider"
+    }
+
+Plan: 1 to import, 0 to add, 0 to change, 0 to destroy.
+
+Warning: Config generation is experimental
+
+Generating configuration during import is currently experimental, and the
+generated configuration format may change in future versions.

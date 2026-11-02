@@ -1,0 +1,6 @@
+out*/bin/
+out*/tfrc
+out*/cap/
+out*/fake.log
+out*/*/.terraform*
+out*/*/terraform.tfstate*

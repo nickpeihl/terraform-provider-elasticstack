@@ -1,0 +1,99 @@
+
+Warning: Provider development overrides are in effect
+
+The following provider development overrides are set in the CLI
+configuration:
+ - elastic/elasticstack in /Users/nickpeihl/Development/Elastic/terraform-provider-elasticstack-worktrees/dashboards-tf-g/prototype_g/out/bin
+
+The behavior may therefore not match any released version of the provider and
+applying changes may cause the state to become incompatible with published
+releases.
+elasticstack_kibana_dashboard.this: Preparing import... [id=default/vis_by_reference]
+elasticstack_kibana_dashboard.this: Refreshing state... [id=default/vis_by_reference]
+
+Terraform will perform the following actions:
+
+  # elasticstack_kibana_dashboard.this will be imported
+  # (config will be generated)
+    resource "elasticstack_kibana_dashboard" "this" {
+        dashboard_id     = "vis_by_reference"
+        description      = "vis vis_config.by_reference full acceptance"
+        id               = "default/vis_by_reference"
+        options          = {}
+        panels           = [
+            {
+                config_json = jsonencode(
+                    {
+                        description = "By reference desc"
+                        hide_border = false
+                        hide_title  = true
+                        ref_id      = "lensRef"
+                        references  = [
+                            {
+                                id   = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
+                                name = "lensRef"
+                                type = "lens"
+                            },
+                        ]
+                        time_range  = {
+                            from = "now-7d"
+                            mode = "relative"
+                            to   = "now"
+                        }
+                        title       = "Ref title"
+                    }
+                )
+                grid        = {
+                    h = 10
+                    w = 24
+                    x = 0
+                    y = 0
+                }
+                type        = "vis"
+                vis_config  = {
+                    by_reference = {
+                        description     = "By reference desc"
+                        hide_border     = false
+                        hide_title      = true
+                        ref_id          = "lensRef"
+                        references_json = jsonencode(
+                            [
+                                {
+                                    id   = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
+                                    name = "lensRef"
+                                    type = "lens"
+                                },
+                            ]
+                        )
+                        time_range      = {
+                            from = "now-7d"
+                            mode = "relative"
+                            to   = "now"
+                        }
+                        title           = "Ref title"
+                    }
+                }
+            },
+        ]
+        query            = {
+            expression = ""
+            language   = "kql"
+        }
+        refresh_interval = {
+            pause = true
+            value = 0
+        }
+        space_id         = "default"
+        time_range       = {
+            from = "now-15m"
+            to   = "now"
+        }
+        title            = "Vis by reference"
+    }
+
+Plan: 1 to import, 0 to add, 0 to change, 0 to destroy.
+
+Warning: Config generation is experimental
+
+Generating configuration during import is currently experimental, and the
+generated configuration format may change in future versions.

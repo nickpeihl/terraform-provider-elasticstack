@@ -1,0 +1,141 @@
+
+Warning: Provider development overrides are in effect
+
+The following provider development overrides are set in the CLI
+configuration:
+ - elastic/elasticstack in /Users/nickpeihl/Development/Elastic/terraform-provider-elasticstack-worktrees/dashboards-tf-g/prototype_g/out_stock/bin
+
+The behavior may therefore not match any released version of the provider and
+applying changes may cause the state to become incompatible with published
+releases.
+
+Error: Invalid vis panel configuration
+
+  with elasticstack_kibana_dashboard.this,
+  on generated.tf line 20, in resource "elasticstack_kibana_dashboard" "this":
+  20:     {
+  21:       aiops_change_point_chart_config = null
+  22:       aiops_log_rate_analysis_config  = null
+  23:       aiops_pattern_analysis_config   = null
+  24:       apm_service_map_config          = null
+  25:       config_json = jsonencode({
+  26:         description = "By reference desc"
+  27:         hide_border = false
+  28:         hide_title  = true
+  29:         ref_id      = "lensRef"
+  30:         references = [{
+  31:           id   = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
+  32:           name = "lensRef"
+  33:           type = "lens"
+  34:         }]
+  35:         time_range = {
+  36:           from = "now-7d"
+  37:           mode = "relative"
+  38:           to   = "now"
+  39:         }
+  40:         title = "Ref title"
+  41:       })
+  42:       discover_session_config  = null
+  43:       esql_control_config      = null
+  44:       field_stats_table_config = null
+  45:       grid = {
+  46:         h = 10
+  47:         w = 24
+  48:         x = 0
+  49:         y = 0
+  50:       }
+  51:       image_config                     = null
+  52:       links_config                     = null
+  53:       markdown_config                  = null
+  54:       ml_anomaly_charts_config         = null
+  55:       ml_anomaly_swimlane_config       = null
+  56:       ml_single_metric_viewer_config   = null
+  57:       options_list_control_config      = null
+  58:       range_slider_control_config      = null
+  59:       slo_alerts_config                = null
+  60:       slo_burn_rate_config             = null
+  61:       slo_error_budget_config          = null
+  62:       slo_overview_config              = null
+  63:       synthetics_monitors_config       = null
+  64:       synthetics_stats_overview_config = null
+  65:       time_slider_control_config       = null
+  66:       type                             = "vis"
+  67:       vis_config = {
+  68:         by_reference = {
+  69:           description = "By reference desc"
+  70:           drilldowns  = null
+  71:           hide_border = false
+  72:           hide_title  = true
+  73:           ref_id      = "lensRef"
+  74:           references_json = jsonencode([{
+  75:             id   = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
+  76:             name = "lensRef"
+  77:             type = "lens"
+  78:           }])
+  79:           time_range = {
+  80:             from = "now-7d"
+  81:             mode = "relative"
+  82:             to   = "now"
+  83:           }
+  84:           title = "Ref title"
+  85:         }
+  86:         by_value = null
+  87:       }
+  88:     },
+
+Panels with `type = "vis"` require exactly one of `vis_config`, panel-level
+`config_json`.
+
+Error: Invalid Attribute Combination
+
+  with elasticstack_kibana_dashboard.this,
+  on generated.tf line 25, in resource "elasticstack_kibana_dashboard" "this":
+  25:       config_json = jsonencode({
+  26:         description = "By reference desc"
+  27:         hide_border = false
+  28:         hide_title  = true
+  29:         ref_id      = "lensRef"
+  30:         references = [{
+  31:           id   = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
+  32:           name = "lensRef"
+  33:           type = "lens"
+  34:         }]
+  35:         time_range = {
+  36:           from = "now-7d"
+  37:           mode = "relative"
+  38:           to   = "now"
+  39:         }
+  40:         title = "Ref title"
+  41:       })
+
+Attribute "panels[0].vis_config" cannot be specified when
+"panels[0].config_json" is specified
+
+Error: Invalid Attribute Combination
+
+  with elasticstack_kibana_dashboard.this,
+  on generated.tf line 67, in resource "elasticstack_kibana_dashboard" "this":
+  67:       vis_config = {
+  68:         by_reference = {
+  69:           description = "By reference desc"
+  70:           drilldowns  = null
+  71:           hide_border = false
+  72:           hide_title  = true
+  73:           ref_id      = "lensRef"
+  74:           references_json = jsonencode([{
+  75:             id   = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
+  76:             name = "lensRef"
+  77:             type = "lens"
+  78:           }])
+  79:           time_range = {
+  80:             from = "now-7d"
+  81:             mode = "relative"
+  82:             to   = "now"
+  83:           }
+  84:           title = "Ref title"
+  85:         }
+  86:         by_value = null
+  87:       }
+
+Attribute "panels[0].config_json" cannot be specified when
+"panels[0].vis_config" is specified

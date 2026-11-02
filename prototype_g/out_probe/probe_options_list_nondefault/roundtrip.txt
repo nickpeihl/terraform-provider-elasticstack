@@ -1,0 +1,9 @@
+$.pinned_panels[0].config.values_source: fixture="field" written=undefined
+$.pinned_panels[0].config.use_global_filters: fixture=false written=undefined
+$.pinned_panels[0].config.ignore_validations: fixture=true written=undefined
+$.pinned_panels[0].config.exclude: fixture=true written=undefined
+$.pinned_panels[0].config.exists_selected: fixture=true written=undefined
+$.pinned_panels[0].config.run_past_timeout: fixture=true written=undefined
+$.pinned_panels[0].config.sort: fixture={"by":"_key","direction":"asc"} written=undefined
+$.panels: fixture=[] written=undefined
+$.options: fixture=undefined written={}

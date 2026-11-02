@@ -1,0 +1,2 @@
+$.panels[0].config.settings: fixture=undefined written={}
+$.options: fixture=undefined written={}

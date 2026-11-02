@@ -1,0 +1,2 @@
+$.pinned_panels[0].config.values_source: fixture="field" written=undefined
+$.options: fixture=undefined written={}

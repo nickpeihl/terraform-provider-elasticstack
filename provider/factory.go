@@ -25,5 +25,5 @@ import (
 // ProtoV6ProviderServerFactory returns a protocol 6 server factory for the sole
 // Plugin Framework provider implementation.
 func ProtoV6ProviderServerFactory(version string) func() tfprotov6.ProviderServer {
-	return providerserver.NewProtocol6(NewFrameworkProvider(version))
+	return protoGWrap(providerserver.NewProtocol6(NewFrameworkProvider(version)))
 }

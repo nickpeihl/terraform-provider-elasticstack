@@ -1,0 +1,19 @@
+{
+  "options": {},
+  "pinned_panels": [
+    {
+      "config": {
+        "data_view_id": "90943e30-9a47-11e8-b64d-95841ca0b247",
+        "field_name": "response.keyword",
+        "search_technique": "prefix",
+        "selected_options": [],
+        "single_select": false,
+        "title": "Response code"
+      },
+      "grow": true,
+      "type": "options_list_control",
+      "width": "medium"
+    }
+  ],
+  "title": "probe non-default control values"
+}

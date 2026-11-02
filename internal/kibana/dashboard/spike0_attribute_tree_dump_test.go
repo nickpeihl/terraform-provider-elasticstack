@@ -170,11 +170,16 @@ func (w *s0Walker) validators(p string, attr any) {
 				w.opaque[p] = append(w.opaque[p], "Condition(static path)")
 				continue
 			}
+			dep := s0ExprToPath(s0PathExpr(p).Merge(*(exprPtr.Interface().(*path.Expression))))
+			if presence, _ := s0Field(v, "matchNestedObjectPresence"); presence.Bool() {
+				// ForbiddenIfDrilldownVariantSiblingNestedPresent: pairwise sibling exclusion.
+				w.addGroup("conflicts_with", []string{p, dep})
+				continue
+			}
 			allowed, _ := s0Field(v, "allowedIfOptions")
 			if allowed.IsNil() {
 				continue // RequiredIf: same values as AllowedIf for typed config blocks; not modelled separately
 			}
-			dep := s0ExprToPath(s0PathExpr(p).Merge(*(exprPtr.Interface().(*path.Expression))))
 			vals, _ := s0Field(v, "allowedValues")
 			if w.disc[dep] == nil {
 				w.disc[dep] = map[string][]string{}
@@ -182,6 +187,12 @@ func (w *s0Walker) validators(p string, attr any) {
 			for j := 0; j < vals.Len(); j++ {
 				w.disc[dep][p] = append(w.disc[dep][p], vals.Index(j).String())
 			}
+		case "DrilldownItemModeValidator":
+			// Opaque; semantics from its Description(): exactly one of dashboard/discover/url per item.
+			w.addGroup("exactly_one_of", []string{s0Join(p, "dashboard"), s0Join(p, "discover"), s0Join(p, "url")})
+		case "DrilldownListItemVariantsValidator":
+			// Opaque; semantics from its Description(): at least one variant (exclusion comes from sibling Conditions).
+			w.addGroup("at_least_one_of", []string{s0Join(p, "dashboard_drilldown"), s0Join(p, "discover_drilldown"), s0Join(p, "url_drilldown")})
 		default:
 			w.opaque[p] = append(w.opaque[p], t.String())
 		}
@@ -288,6 +299,7 @@ func TestSpike0DumpAttributeTree(t *testing.T) {
 	w.addGroup("exactly_one_of", pinnedMembers)
 
 	w.disc["pinned_panels[].type"] = pinnedDisc
+	w.mergeConflictCliques()
 
 	// Attach each discriminator to the group whose member set equals the discriminated keys.
 	for dep, vals := range w.disc {
@@ -370,4 +382,72 @@ func s0Contains(xs []string, x string) bool {
 		}
 	}
 	return false
+}
+
+// mergeConflictCliques folds pairwise conflicts_with groups whose members form a clique into one group, and
+// a conflicts_with clique + at_least_one_of over the same members into exactly_one_of.
+func (w *s0Walker) mergeConflictCliques() {
+	edges := map[string]map[string]bool{}
+	pairKeys := map[string]bool{}
+	for k, g := range w.groups {
+		if g.Kind != "conflicts_with" || len(g.Members) != 2 {
+			continue
+		}
+		a, b := g.Members[0], g.Members[1]
+		if edges[a] == nil {
+			edges[a] = map[string]bool{}
+		}
+		if edges[b] == nil {
+			edges[b] = map[string]bool{}
+		}
+		edges[a][b], edges[b][a] = true, true
+		pairKeys[k] = true
+	}
+	seen := map[string]bool{}
+	for start := range edges {
+		if seen[start] {
+			continue
+		}
+		comp := []string{}
+		stack := []string{start}
+		for len(stack) > 0 {
+			n := stack[len(stack)-1]
+			stack = stack[:len(stack)-1]
+			if seen[n] {
+				continue
+			}
+			seen[n] = true
+			comp = append(comp, n)
+			for m := range edges[n] {
+				stack = append(stack, m)
+			}
+		}
+		if len(comp) < 3 {
+			continue
+		}
+		clique := true
+		for _, a := range comp {
+			for _, b := range comp {
+				if a != b && !edges[a][b] {
+					clique = false
+				}
+			}
+		}
+		if !clique {
+			continue
+		}
+		sort.Strings(comp)
+		for k, g := range w.groups {
+			if pairKeys[k] && s0Contains(comp, g.Members[0]) {
+				delete(w.groups, k)
+			}
+		}
+		alo := "at_least_one_of|" + strings.Join(comp, ",")
+		if _, ok := w.groups[alo]; ok {
+			delete(w.groups, alo)
+			w.addGroup("exactly_one_of", comp)
+		} else {
+			w.addGroup("conflicts_with", comp)
+		}
+	}
 }

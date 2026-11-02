@@ -10,7 +10,7 @@ export type Mode = 'required' | 'optional' | 'optional_computed' | 'computed';
 
 export interface Recognizer {
   property?: string;
-  default?: string;
+  'when-absent'?: string;
   present?: string;
 }
 export interface UnionX {
@@ -23,7 +23,7 @@ export interface UnionX {
   'default-variant'?: string;
   exclude?: string[];
   group?: 'exactly_one_of' | 'conflicts_with';
-  discriminator?: boolean;
+  'emit-discriminator'?: boolean;
   extra?: Array<{ name: string; kind: Kind; mode: Mode; values: string[] }>;
 }
 
@@ -127,20 +127,20 @@ export const isUnion = (n: Schema): boolean => !!unionKey(n);
 
 /** Recognizer values a branch can carry (nested unions contribute all their leaves' values). */
 export const recognizerValues = (branch: Schema, r: Recognizer): string[] => {
-  if (r.present) return (branch.required ?? []).includes(r.present) ? ['present'] : ['absent'];
   if (isUnion(branch)) return [...new Set(branchesOf(branch).flatMap((b) => recognizerValues(b, r)))];
+  if (r.present) return branch.properties?.[r.present] ? ['present'] : ['absent'];
   const p = branch.properties?.[r.property!];
-  if (!p) return r.default ? [r.default] : [];
+  if (!p) return r['when-absent'] ? [r['when-absent']] : [];
   const pn = norm(p);
   if (pn.enum) return pn.enum.map(String);
   if (pn.const !== undefined) return [String(pn.const)];
-  return r.default ? [r.default] : [];
+  return r['when-absent'] ? [r['when-absent']] : [];
 };
 
 export const recognize = (value: any, r: Recognizer): string | undefined => {
   if (r.present) return value != null && value[r.present] !== undefined ? 'present' : 'absent';
   const v = value?.[r.property!];
-  return v === undefined ? r.default : String(v);
+  return v === undefined ? r['when-absent'] : String(v);
 };
 
 export const keyFor = (u: UnionX, value: string): string | undefined => {
@@ -203,6 +203,13 @@ export const mergeBranches = (bs: Schema[]): Schema => {
       req[k] = bs.every((b) => (b.required ?? []).includes(api));
     }
     const required = Object.keys(props).filter((k) => req[k]);
+    // lint: a mapping annotation present on one branch but not on another is a likely uncovered API change
+    for (const [k, vs] of Object.entries(props)) {
+      if (vs.length !== bs.length) continue;
+      const sig = vs.map((v) => ['json', 'custom', 'ignore'].filter((n) => x(v, n) || x(v.items, n)).join('+'));
+      if (new Set(sig).size > 1)
+        lint.notes.push(`merge asymmetry on '${k}': ${bs.map((b, i) => `${b['x-tf-ref'] ?? b.title ?? 'inline'}=[${sig[i]}]`).join(' ')}`);
+    }
     const properties = Object.fromEntries(
       Object.entries(props).map(([k, vs]) => [k, vs.length === 1 ? vs[0] : mergeBranches(vs)]),
     );
@@ -287,4 +294,14 @@ export const primKind = (s: Schema): Kind => {
   if (s.type === 'number' || s.type === 'integer') return 'number';
   if (s.type === 'string' || s.enum) return 'string';
   return 'json-string';
+};
+
+/** U1 split: [kept branch, split-out branch], chosen by the x-tf-split recognizer (not by position). */
+export const splitBranches = (items: Schema): [Schema, Schema] => {
+  const split = x(items, 'split');
+  const bs = branchesOf(norm(items));
+  const out = bs.filter((b) => recognizerValues(b, split.recognizer).includes('present'));
+  const keep = bs.filter((b) => !out.includes(b));
+  if (out.length !== 1 || keep.length !== 1) throw new Error('x-tf-split expects exactly one split-out branch');
+  return [keep[0], out[0]];
 };

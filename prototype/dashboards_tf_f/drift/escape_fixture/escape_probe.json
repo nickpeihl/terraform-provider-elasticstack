@@ -1,0 +1,1 @@
+{"title":"Escape ${var} and %{if x}","panels":[{"type":"vis","grid":{"x":0,"y":0},"config":{"type":"metric","data_source":{"type":"esql","query":"FROM logs | EVAL s = \"${not_tf}\""},"metrics":[{"type":"primary","column":"c"}]}}]}

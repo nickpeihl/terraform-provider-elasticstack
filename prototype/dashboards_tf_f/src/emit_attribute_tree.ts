@@ -19,6 +19,7 @@ import {
   norm,
   primKind,
   schemas,
+  splitBranches,
   variantsOf,
   withPolicy,
   x,
@@ -31,6 +32,7 @@ interface Attr { path: string; kind: Kind; element?: Kind; mode: Mode }
 interface Group { kind: string; members: string[]; discriminator?: { path: string; values: Record<string, string[]> } }
 const attrs: Attr[] = [];
 const groups: Group[] = [];
+const lock: Record<string, unknown> = {};
 
 // spike0 slice filter (measuring-stick only, not part of the mapping)
 const SLICE_EXPAND: Record<string, string[]> = {
@@ -130,6 +132,9 @@ const emitUnionBody = (s: Schema, path: string, recognizerToDrop?: string): Arra
   }
   const members: string[] = [];
   const values: Record<string, string[]> = {};
+  lock[path] = Object.fromEntries(
+    variants.map((v) => [v.key, { values: v.values, branches: v.branches.map((b) => b['x-tf-ref'] ?? b.title ?? 'inline') }]),
+  );
   for (const v of variants) {
     const p = join(path, v.key);
     members.push(p);
@@ -146,7 +151,7 @@ const emitUnionBody = (s: Schema, path: string, recognizerToDrop?: string): Arra
     values[p] = e.values;
   }
   const g: Group = { kind: u.group ?? 'exactly_one_of', members };
-  if (u.keep === 'sibling' && u.discriminator !== false) g.discriminator = { path: join(path, r.property!), values };
+  if (u.keep === 'sibling' && u['emit-discriminator'] !== false) g.discriminator = { path: join(path, r.property!), values };
   groups.push(g);
   return [];
 };
@@ -160,7 +165,7 @@ for (const f of fieldSpecs(root)) {
     // U1 special case: x-tf-split moves the section branch to a root attribute
     const items = f.schema.items;
     const split = x(items, 'split');
-    const [panelUnion, section] = branchesOf(norm(items));
+    const [panelUnion, section] = splitBranches(items);
     attrs.push({ path: 'panels', kind: 'list', element: 'object', mode: defaultMode(f) });
     runAll(emitObjectBody(panelUnion, 'panels[]'));
     attrs.push({ path: split.attribute, kind: 'list', element: 'object', mode: defaultMode(f) });
@@ -188,6 +193,8 @@ writeFileSync(
     2,
   ),
 );
+writeFileSync(output.replace(/\.json$/, '.variant-lock.json'), JSON.stringify(lock, null, 2));
+for (const n of [...new Set(lint.notes)]) console.error(`NOTE ${n}`);
 console.error(`attributes=${attrs.length} groups=${groups.length} unmapped-unions=${lint.unmapped.length}`);
 for (const u of lint.unmapped) console.error(`UNMAPPED ${u}`);
 void schemas;

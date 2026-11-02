@@ -155,7 +155,7 @@ actions:
         default-variant: data_layer
         exclude: [annotations, annotation_group]
         group: conflicts_with
-        discriminator: false
+        emit-discriminator: false
   - target: $.components.schemas['Kibana_HTTP_APIs_visXyLayerNoESQL','Kibana_HTTP_APIs_visXyLayerESQL'].properties['data_source','breakdown_by','x']
     description: "JSON LEAF: data_source_json, breakdown_by_json, x_json."
     update: { x-tf-json: true }
@@ -287,8 +287,27 @@ actions:
     update:
       x-tf-union:
         mode: keys
-        recognizer: { property: values_source, default: field }
+        recognizer: { property: values_source, when-absent: field }
         key: 'by_{value}'
   - target: $.components.schemas['Kibana_HTTP_APIs_kbn-controls-schemas-range-slider-control-schema-esql'].properties.values_source
     description: "EXCEPTION keep: by_esql repeats the recognizer as a required attribute."
     update: { x-tf-keep-recognizer: true }
+
+  # ---------------------------------------------------------------- OUT OF SLICE, needed only so the fixtures convert
+  - target: $.components.schemas['Kibana_HTTP_APIs_kbn-dashboard-panel-type-markdown'].properties.config
+    description: "markdown by value vs by reference (same recognizer as U4)."
+    update:
+      x-tf-union:
+        mode: keys
+        recognizer: { present: ref_id }
+        variants: { by_reference: present, by_value: absent }
+  - target: $.components.schemas['Kibana_HTTP_APIs_kbn-controls-schemas-controls-group-schema-options-list-control'].properties.config
+    description: >-
+      options list source (same recognizer as U10). NOTE: the baseline keeps the fields common to both
+      sources as siblings of by_field/by_esql (unlike range slider); matching that would need an extra
+      `x-tf-union.shared: sibling` knob. Not checked by the golden tree (outside the slice).
+    update:
+      x-tf-union:
+        mode: keys
+        recognizer: { property: values_source, when-absent: field }
+        key: 'by_{value}'

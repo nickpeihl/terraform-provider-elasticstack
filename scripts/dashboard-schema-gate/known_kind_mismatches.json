@@ -1,0 +1,9 @@
+{
+  "kind panels[].links_config.by_value.links: Kibana list<json-string>, provider list<object>": "nickpeihl/terraform-provider-elasticstack#7 (tf-export 21)",
+  "kind panels[].ml_anomaly_charts_config.severity_threshold: Kibana list<json-string>, provider list<object>": "nickpeihl/terraform-provider-elasticstack#7 (tf-export 21)",
+  "kind panels[].vis_config.by_value.pie_chart_config.group_by: Kibana list<json-string>, provider list<object>": "nickpeihl/terraform-provider-elasticstack#6 (tf-export 20)",
+  "kind panels[].vis_config.by_value.pie_chart_config.metrics: Kibana list<json-string>, provider list<object>": "nickpeihl/terraform-provider-elasticstack#6 (tf-export 20)",
+  "kind panels[].vis_config.by_value.waffle_config.group_by: Kibana list<json-string>, provider list<object>": "nickpeihl/terraform-provider-elasticstack#6 (tf-export 20)",
+  "kind panels[].vis_config.by_value.waffle_config.metrics: Kibana list<json-string>, provider list<object>": "nickpeihl/terraform-provider-elasticstack#6 (tf-export 20)",
+  "kind panels[].vis_config.by_value.xy_chart_config.layers[].reference_line_layer.thresholds: Kibana list<json-string>, provider list<object>": "nickpeihl/terraform-provider-elasticstack#4 (tf-export 12)"
+}

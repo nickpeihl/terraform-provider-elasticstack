@@ -129,6 +129,46 @@ jobs:
           version: v2.15.0
           args: --max-same-issues=0 --allow-parallel-runners ./...
 
+  dashboard-schema-gate:
+    name: Dashboard schema gate
+    needs: classify
+    if: needs.classify.outputs.provider_changes == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+          # The gate reads the base branch's lists to check they did not grow.
+          fetch-depth: 0
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7
+        with:
+          go-version-file: "go.mod"
+          cache: true
+          cache-dependency-path: go.sum
+      - name: Compare Kibana's derived dashboard schema with the provider's
+        run: make check-dashboard-schema DASHBOARD_SCHEMA_BASE_REF="origin/${BASE_REF:-main}"
+        env:
+          BASE_REF: ${{ github.base_ref }}
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: "24"
+      # The gate's own tests feed Kibana's real derivation a deliberately wrong mapping; they need the few Kibana
+      # files the derivation reads, at the revision source.json records.
+      - name: Fetch Kibana's derivation at the recorded revision
+        run: |
+          repo=$(jq -r .kibana_repo scripts/dashboard-schema-gate/source.json)
+          ref=$(jq -r .kibana_ref scripts/dashboard-schema-gate/source.json)
+          pkg=src/platform/packages/shared/as-code/dashboard-terraform/src
+          for f in oas_docs/output/kibana.yaml "$pkg/attribute_tree.ts" "$pkg/oas_model.ts" "$pkg/provider.ts"; do
+            mkdir -p "$RUNNER_TEMP/kibana/$(dirname "$f")"
+            curl -sSf --retry 5 -o "$RUNNER_TEMP/kibana/$f" "https://raw.githubusercontent.com/$repo/$ref/$f"
+          done
+      - name: Test the gate against a deliberately wrong mapping
+        run: go test ./scripts/dashboard-schema-gate/ -count=1 -run 'Kibana'
+        env:
+          DASHBOARD_SCHEMA_GATE_KIBANA_DIR: ${{ runner.temp }}/kibana
+
   load-matrix:
     name: Load acceptance-test matrix
     needs: classify

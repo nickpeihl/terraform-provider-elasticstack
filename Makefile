@@ -252,11 +252,23 @@ workflow-generate: ## Generate workflow markdown sources
 	@ gh aw compile
 
 .PHONY: workflow-test
-workflow-test: ## Run unit tests for workflow helpers (Go changelog + kibana-api-gaps, node workflow lib)
+workflow-test: ## Run unit tests for workflow helpers (Go changelog + kibana-api-gaps + dashboard-schema-gate, node workflow lib)
 	@ go test ./scripts/kibana-api-gaps/... -count=1
 	@ go test ./scripts/changelog/... -count=1
 	@ go test ./scripts/version-matrix/... -count=1
+	@ go test ./scripts/dashboard-schema-gate/... -count=1
 	@ node --test .github/scripts/workflows/lib/*.test.mjs
+
+DASHBOARD_SCHEMA_BASE_REF ?= origin/main
+
+.PHONY: check-dashboard-schema
+check-dashboard-schema: ## Compare the dashboard schema Kibana's mapping derives with the provider's (lists may not grow beyond DASHBOARD_SCHEMA_BASE_REF)
+	go run ./scripts/dashboard-schema-gate check --base-ref $(DASHBOARD_SCHEMA_BASE_REF)
+
+.PHONY: update-dashboard-schema
+update-dashboard-schema: ## Re-derive the dashboard schema from KIBANA_DIR, shrink the gate's lists and set Kibana's provider version (needs node)
+	@ test -n "$(KIBANA_DIR)" || (echo "KIBANA_DIR must point at a Kibana checkout" && exit 1)
+	go run ./scripts/dashboard-schema-gate update --kibana-dir $(KIBANA_DIR)
 
 .PHONY: gen
 gen: docs-generate ## Generate the code and documentation

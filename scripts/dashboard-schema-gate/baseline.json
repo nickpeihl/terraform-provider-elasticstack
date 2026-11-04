@@ -153,7 +153,6 @@
   "missing panels[].vis_config.by_value.xy_chart_config.styling: Kibana object, not in the provider",
   "mode panels[].config_json: Kibana optional, provider optional_computed",
   "mode panels[].discover_session_config.by_reference.selected_tab_id: Kibana optional, provider optional_computed",
-  "mode panels[].esql_control_config.esql_query: Kibana optional, provider required",
   "mode panels[].id: Kibana optional, provider optional_computed",
   "mode panels[].links_config.by_value.layout: Kibana optional, provider required",
   "mode panels[].markdown_config.by_value.settings: Kibana optional, provider required",
@@ -309,6 +308,5 @@
   "mode panels[].vis_config.by_value.xy_chart_config.layers[].reference_line_layer.ignore_global_filters: Kibana optional, provider optional_computed",
   "mode panels[].vis_config.by_value.xy_chart_config.layers[].reference_line_layer.sampling: Kibana optional, provider optional_computed",
   "mode panels[].vis_config.by_value.xy_chart_config.query.language: Kibana optional, provider optional_computed",
-  "mode pinned_panels[].esql_control_config.esql_query: Kibana optional, provider required",
   "mode sections[].id: Kibana optional, provider optional_computed"
 ]

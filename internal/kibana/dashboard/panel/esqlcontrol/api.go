@@ -29,6 +29,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 const panelConfigAttrsKeyPrefix = panelType + "_config"
@@ -108,8 +110,9 @@ func (Handler) ValidatePanelConfig(_ context.Context, attrs map[string]attr.Valu
 
 	requiredString("variable_name", "variable_name")
 	requiredString("variable_type", "variable_type")
-	requiredString("esql_query", "esql_query")
 	requiredString("control_type", "control_type")
+
+	out.Append(validateQueryForControlType(attrRead, cfgPath)...)
 
 	sel := attrRead["selected_options"]
 	switch {
@@ -123,4 +126,42 @@ func (Handler) ValidatePanelConfig(_ context.Context, attrs map[string]attr.Valu
 		}
 	}
 	return out
+}
+
+// validateQueryForControlType requires esql_query when control_type is VALUES_FROM_QUERY. Only that
+// branch of Kibana's union has a query; a STATIC_VALUES control takes its options from available_options.
+func validateQueryForControlType(attrs map[string]attr.Value, cfgPath path.Path) diag.Diagnostics {
+	var out diag.Diagnostics
+	ct, ok := attrs["control_type"].(types.String)
+	if !ok || ct.IsUnknown() || ct.ValueString() != string(kbapi.VALUESFROMQUERY) {
+		return out
+	}
+	if deferVal, missing := panelkit.StringAttrDeferOrMissing(attrs["esql_query"]); !deferVal && missing {
+		out.AddAttributeError(cfgPath.AtName("esql_query"), "Invalid ES|QL control configuration",
+			"`esql_query` is required when `control_type` is `VALUES_FROM_QUERY`.")
+	}
+	return out
+}
+
+// QueryForControlTypeValidator applies the esql_query rule of ValidatePanelConfig to an
+// esql_control_config object outside panels[] (pinned_panels[]).
+func QueryForControlTypeValidator() validator.Object {
+	return queryForControlTypeValidator{}
+}
+
+type queryForControlTypeValidator struct{}
+
+func (queryForControlTypeValidator) Description(_ context.Context) string {
+	return "Requires `esql_query` when `control_type` is `VALUES_FROM_QUERY`."
+}
+
+func (v queryForControlTypeValidator) MarkdownDescription(ctx context.Context) string {
+	return v.Description(ctx)
+}
+
+func (queryForControlTypeValidator) ValidateObject(_ context.Context, req validator.ObjectRequest, resp *validator.ObjectResponse) {
+	if req.ConfigValue.IsNull() || req.ConfigValue.IsUnknown() {
+		return
+	}
+	resp.Diagnostics.Append(validateQueryForControlType(req.ConfigValue.Attributes(), req.Path)...)
 }

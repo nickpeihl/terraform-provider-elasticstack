@@ -52,8 +52,8 @@ func SchemaAttribute() schema.Attribute {
 				},
 			},
 			"esql_query": schema.StringAttribute{
-				MarkdownDescription: "The ES|QL query used to populate the control's options.",
-				Required:            true,
+				MarkdownDescription: "ES|QL query whose results populate the control's options. Required when `control_type` is `VALUES_FROM_QUERY`; `STATIC_VALUES` controls use `available_options`.",
+				Optional:            true,
 			},
 			"control_type": schema.StringAttribute{
 				MarkdownDescription: "The control type. Allowed values: `STATIC_VALUES`, `VALUES_FROM_QUERY`.",

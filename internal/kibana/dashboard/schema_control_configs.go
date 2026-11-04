@@ -20,6 +20,7 @@ package dashboard
 import (
 	"strings"
 
+	"github.com/elastic/terraform-provider-elasticstack/internal/kibana/dashboard/panel/esqlcontrol"
 	"github.com/elastic/terraform-provider-elasticstack/internal/kibana/dashboard/panel/optionslist"
 	"github.com/elastic/terraform-provider-elasticstack/internal/kibana/dashboard/panel/rangeslider"
 	"github.com/elastic/terraform-provider-elasticstack/internal/kibana/dashboard/panelkit"
@@ -102,8 +103,8 @@ func esqlControlConfigInnerAttributes() map[string]schema.Attribute {
 			},
 		},
 		attrESQLQuery: schema.StringAttribute{
-			MarkdownDescription: "The ES|QL query used to populate the control's options.",
-			Required:            true,
+			MarkdownDescription: "ES|QL query whose results populate the control's options. Required when `control_type` is `VALUES_FROM_QUERY`; `STATIC_VALUES` controls use `available_options`.",
+			Optional:            true,
 		},
 		attrControlType: schema.StringAttribute{
 			MarkdownDescription: "The control type. Allowed values: `STATIC_VALUES`, `VALUES_FROM_QUERY`.",
@@ -163,6 +164,7 @@ func pinnedEsqlControlConfigSchema() schema.SingleNestedAttribute {
 		),
 		Optional:   true,
 		Attributes: esqlControlConfigInnerAttributes(),
+		Validators: []validator.Object{esqlcontrol.QueryForControlTypeValidator()},
 	}
 }
 

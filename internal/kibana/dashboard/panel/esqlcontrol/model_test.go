@@ -74,7 +74,7 @@ func Test_PopulateFromAPI_import_populatesAllFields(t *testing.T) {
 	assert.Equal(t, typeutils.StringsToListMust([]string{"opt_a"}), pm.EsqlControlConfig.SelectedOptions)
 	assert.Equal(t, types.StringValue("my_var"), pm.EsqlControlConfig.VariableName)
 	assert.Equal(t, types.StringValue("values"), pm.EsqlControlConfig.VariableType)
-	assert.Equal(t, types.StringValue(""), pm.EsqlControlConfig.EsqlQuery)
+	assert.True(t, pm.EsqlControlConfig.EsqlQuery.IsNull(), "a STATIC_VALUES control has no query")
 	assert.Equal(t, types.StringValue("STATIC_VALUES"), pm.EsqlControlConfig.ControlType)
 	assert.Equal(t, types.StringValue("My Control"), pm.EsqlControlConfig.Title)
 	assert.Equal(t, types.BoolValue(true), pm.EsqlControlConfig.SingleSelect)
@@ -113,6 +113,46 @@ func Test_PopulateFromAPI_existingBlock_requiredFieldsUpdated(t *testing.T) {
 	assert.Equal(t, types.StringValue("values"), pm.EsqlControlConfig.VariableType)
 	assert.Equal(t, types.StringValue("FROM old-*"), pm.EsqlControlConfig.EsqlQuery)
 	assert.Equal(t, types.StringValue("STATIC_VALUES"), pm.EsqlControlConfig.ControlType)
+}
+
+// Test: a STATIC_VALUES control configured without esql_query (as Kibana exports it) reads back
+// with esql_query null, so the configuration does not drift.
+func Test_PopulateFromAPI_staticValuesWithoutQuery_staysNull(t *testing.T) {
+	pm := &models.PanelModel{
+		EsqlControlConfig: &models.EsqlControlConfigModel{
+			SelectedOptions:  typeutils.StringsToListMust([]string{"opt_a"}),
+			VariableName:     types.StringValue("my_var"),
+			VariableType:     types.StringValue("values"),
+			EsqlQuery:        types.StringNull(),
+			ControlType:      types.StringValue("STATIC_VALUES"),
+			AvailableOptions: types.ListNull(types.StringType),
+		},
+	}
+	tfPanel := &models.PanelModel{EsqlControlConfig: pm.EsqlControlConfig}
+	PopulateFromAPI(pm, tfPanel, minimalEsqlAPIConfig(t))
+
+	require.NotNil(t, pm.EsqlControlConfig)
+	assert.True(t, pm.EsqlControlConfig.EsqlQuery.IsNull())
+}
+
+// Test: on import, a VALUES_FROM_QUERY control reads back its query.
+func Test_PopulateFromAPI_import_valuesFromQuery_readsQuery(t *testing.T) {
+	var cfg kbapi.KibanaHTTPAPIsKbnDashboardPanelTypeEsqlControl_Config
+	require.NoError(t, cfg.FromKibanaHTTPAPIsKbnControlsSchemasOptionsListEsqlControlSchemaValuesFromQuery(
+		kbapi.KibanaHTTPAPIsKbnControlsSchemasOptionsListEsqlControlSchemaValuesFromQuery{
+			SelectedOptions: []string{},
+			VariableName:    "svc",
+			VariableType:    kbapi.KibanaHTTPAPIsKbnControlsSchemasOptionsListEsqlControlSchemaValuesFromQueryVariableTypeValues,
+			ControlType:     kbapi.VALUESFROMQUERY,
+			EsqlQuery:       "FROM logs-* | STATS BY service.name",
+		}))
+
+	pm := &models.PanelModel{}
+	PopulateFromAPI(pm, nil, cfg)
+
+	require.NotNil(t, pm.EsqlControlConfig)
+	assert.Equal(t, types.StringValue("VALUES_FROM_QUERY"), pm.EsqlControlConfig.ControlType)
+	assert.Equal(t, types.StringValue("FROM logs-* | STATS BY service.name"), pm.EsqlControlConfig.EsqlQuery)
 }
 
 // Test: null-preservation — null optional fields in state are not overwritten by API values.

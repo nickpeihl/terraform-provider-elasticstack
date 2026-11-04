@@ -49,6 +49,8 @@ func TestContract_EsqlControlPanel(t *testing.T) {
 		SkipFields: []string{
 			"config.available_options",
 			"config.esql_query",
+			// Kibana drops esql_query from STATIC_VALUES controls, so a configured query is kept from prior state.
+			"esql_query",
 			"display_settings",
 			"title",
 			"single_select",

@@ -616,7 +616,6 @@ Optional:
 Required:
 
 - `control_type` (String) The control type. Allowed values: `STATIC_VALUES`, `VALUES_FROM_QUERY`.
-- `esql_query` (String) The ES|QL query used to populate the control's options.
 - `selected_options` (List of String) List of currently selected option values for the control.
 - `variable_name` (String) The ES|QL variable name that this control binds to.
 - `variable_type` (String) The type of ES|QL variable. Allowed values: `fields`, `values`, `functions`, `time_literal`, `multi_values`.
@@ -625,6 +624,7 @@ Optional:
 
 - `available_options` (List of String) Pre-populated list of available options shown before the query executes.
 - `display_settings` (Attributes) Display configuration for the control widget. (see [below for nested schema](#nestedatt--panels--esql_control_config--display_settings))
+- `esql_query` (String) ES|QL query whose results populate the control's options. Required when `control_type` is `VALUES_FROM_QUERY`; `STATIC_VALUES` controls use `available_options`.
 - `single_select` (Boolean) When true, restricts the control to single-value selection.
 - `title` (String) A human-readable title displayed above the control widget.
 
@@ -3986,7 +3986,6 @@ Configuration for a time slider control. Controls the visible time window within
 Required:
 
 - `control_type` (String) The control type. Allowed values: `STATIC_VALUES`, `VALUES_FROM_QUERY`.
-- `esql_query` (String) The ES|QL query used to populate the control's options.
 - `selected_options` (List of String) List of currently selected option values for the control.
 - `variable_name` (String) The ES|QL variable name that this control binds to.
 - `variable_type` (String) The type of ES|QL variable. Allowed values: `fields`, `values`, `functions`, `time_literal`, `multi_values`.
@@ -3995,6 +3994,7 @@ Optional:
 
 - `available_options` (List of String) Pre-populated list of available options shown before the query executes.
 - `display_settings` (Attributes) Display configuration for the control widget. (see [below for nested schema](#nestedatt--pinned_panels--esql_control_config--display_settings))
+- `esql_query` (String) ES|QL query whose results populate the control's options. Required when `control_type` is `VALUES_FROM_QUERY`; `STATIC_VALUES` controls use `available_options`.
 - `single_select` (Boolean) When true, restricts the control to single-value selection.
 - `title` (String) A human-readable title displayed above the control widget.
 
@@ -4611,7 +4611,6 @@ Optional:
 Required:
 
 - `control_type` (String) The control type. Allowed values: `STATIC_VALUES`, `VALUES_FROM_QUERY`.
-- `esql_query` (String) The ES|QL query used to populate the control's options.
 - `selected_options` (List of String) List of currently selected option values for the control.
 - `variable_name` (String) The ES|QL variable name that this control binds to.
 - `variable_type` (String) The type of ES|QL variable. Allowed values: `fields`, `values`, `functions`, `time_literal`, `multi_values`.
@@ -4620,6 +4619,7 @@ Optional:
 
 - `available_options` (List of String) Pre-populated list of available options shown before the query executes.
 - `display_settings` (Attributes) Display configuration for the control widget. (see [below for nested schema](#nestedatt--sections--panels--esql_control_config--display_settings))
+- `esql_query` (String) ES|QL query whose results populate the control's options. Required when `control_type` is `VALUES_FROM_QUERY`; `STATIC_VALUES` controls use `available_options`.
 - `single_select` (Boolean) When true, restricts the control to single-value selection.
 - `title` (String) A human-readable title displayed above the control widget.
 

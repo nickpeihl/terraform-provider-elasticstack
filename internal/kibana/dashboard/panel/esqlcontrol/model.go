@@ -50,9 +50,11 @@ type esqlControlAPIData struct {
 }
 
 func esqlControlAPIDataFromConfig(cfg kbapi.KibanaHTTPAPIsKbnDashboardPanelTypeEsqlControl_Config) esqlControlAPIData {
-	// Prefer static-values first: the VALUES_FROM_QUERY union branch is permissive enough that it
-	// can incorrectly match some STATIC_VALUES payloads, dropping fields like available_options.
-	if sv, err := cfg.AsKibanaHTTPAPIsKbnControlsSchemasOptionsListEsqlControlSchemaStaticValues(); err == nil {
+	// Both union decoders are plain json.Unmarshal calls that accept either branch's payload, so the
+	// branch is chosen by control_type: decoding VALUES_FROM_QUERY as STATIC_VALUES drops esql_query,
+	// and the reverse drops available_options.
+	sv, svErr := cfg.AsKibanaHTTPAPIsKbnControlsSchemasOptionsListEsqlControlSchemaStaticValues()
+	if svErr == nil && string(sv.ControlType) != string(kbapi.VALUESFROMQUERY) {
 		return esqlControlAPIData{
 			SelectedOptions:  sv.SelectedOptions,
 			VariableName:     sv.VariableName,
@@ -82,6 +84,15 @@ func esqlControlAPIDataFromConfig(cfg kbapi.KibanaHTTPAPIsKbnDashboardPanelTypeE
 	return esqlControlAPIData{}
 }
 
+// esqlQueryValue is the query as a Terraform value: null when Kibana returned none, as for a
+// STATIC_VALUES control, whose union branch has no query.
+func (d esqlControlAPIData) esqlQueryValue() types.String {
+	if d.EsqlQuery == "" {
+		return types.StringNull()
+	}
+	return types.StringValue(d.EsqlQuery)
+}
+
 // PopulateFromAPI reads back an ES|QL control config from the API response and
 // updates the panel model. Null-preservation semantics apply: if a field is null in the
 // existing TF state, we do not overwrite it with a Kibana-returned value. If there is no
@@ -103,7 +114,7 @@ func PopulateFromAPI(pm *models.PanelModel, tfPanel *models.PanelModel, apiConfi
 			SelectedOptions:  typeutils.StringsToListMust(api.SelectedOptions),
 			VariableName:     types.StringValue(api.VariableName),
 			VariableType:     types.StringValue(api.VariableType),
-			EsqlQuery:        types.StringValue(api.EsqlQuery),
+			EsqlQuery:        api.esqlQueryValue(),
 			ControlType:      types.StringValue(api.ControlType),
 			Title:            types.StringPointerValue(api.Title),
 			SingleSelect:     types.BoolPointerValue(api.SingleSelect),
@@ -134,7 +145,7 @@ func PopulateFromAPI(pm *models.PanelModel, tfPanel *models.PanelModel, apiConfi
 			SelectedOptions:  typeutils.StringsToListMust(api.SelectedOptions),
 			VariableName:     types.StringValue(api.VariableName),
 			VariableType:     types.StringValue(api.VariableType),
-			EsqlQuery:        types.StringValue(api.EsqlQuery),
+			EsqlQuery:        api.esqlQueryValue(),
 			ControlType:      types.StringValue(api.ControlType),
 			Title:            types.StringPointerValue(api.Title),
 			SingleSelect:     types.BoolPointerValue(api.SingleSelect),
@@ -164,7 +175,7 @@ func PopulateFromAPI(pm *models.PanelModel, tfPanel *models.PanelModel, apiConfi
 	existing.SelectedOptions = typeutils.StringsToListMust(api.SelectedOptions)
 	existing.VariableName = types.StringValue(api.VariableName)
 	existing.VariableType = types.StringValue(api.VariableType)
-	existing.EsqlQuery = types.StringValue(api.EsqlQuery)
+	existing.EsqlQuery = api.esqlQueryValue()
 	existing.ControlType = types.StringValue(api.ControlType)
 
 	// Optional fields: update only if already known (non-null) in state.

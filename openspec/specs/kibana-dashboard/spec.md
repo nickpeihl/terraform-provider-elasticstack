@@ -1383,7 +1383,7 @@ For `title`, `description`, `hide_title`, and `hide_border`, the provider SHALL 
 
 ### Requirement: ES|QL control panel behavior (REQ-026)
 
-For `type = "esql_control"` panels, the resource SHALL accept `esql_control_config` with the required fields `selected_options`, `variable_name`, `variable_type`, `esql_query`, and `control_type`, and the optional fields `title`, `single_select`, `available_options`, and `display_settings`.
+For `type = "esql_control"` panels, the resource SHALL accept `esql_control_config` with the required fields `selected_options`, `variable_name`, `variable_type`, and `control_type`, and the optional fields `esql_query`, `title`, `single_select`, `available_options`, and `display_settings`. The same applies to `esql_control_config` on `pinned_panels` entries. `esql_query` SHALL be required when `control_type = "VALUES_FROM_QUERY"`, the only branch of the API union that has a query; a `STATIC_VALUES` control takes its options from `available_options`, and Kibana does not store a query for it.
 
 On write (create and update), the resource SHALL map `esql_control_config` to the `config` object in the `kbn-dashboard-panel-esql_control` API schema. All required fields SHALL be included in the API request. Optional fields SHALL be included only when they are set in Terraform state; absent optional fields SHALL NOT be sent to the API. The `display_settings` sub-object SHALL be sent only when the `display_settings` block is set; within that block, only attributes that are explicitly set SHALL be included.
 
@@ -1402,8 +1402,21 @@ The `esql_control` panel type is a standalone control panel, not a `vis` visuali
   - `esql_control_config.control_type = "STATIC_VALUES"`
 - WHEN the resource is created
 - THEN the provider SHALL send the mapped `config` object to the Kibana dashboard API
-- AND the panel SHALL appear in state with all five required fields populated
+- AND the panel SHALL appear in state with the four required fields and `esql_query` populated
 - AND the provider SHALL NOT populate `config_json` for this panel in state
+
+#### Scenario: STATIC_VALUES esql_control panel without esql_query
+
+- GIVEN an `esql_control_config` block with `control_type = "STATIC_VALUES"`, `available_options` set, and no `esql_query` (the shape Kibana's Export → Terraform writes)
+- WHEN Terraform validates the configuration
+- THEN the configuration SHALL be accepted
+- AND on read-back, when Kibana returns no query, the provider SHALL keep `esql_query` null in state and SHALL NOT create a spurious diff on the next plan
+
+#### Scenario: VALUES_FROM_QUERY esql_control panel without esql_query
+
+- GIVEN an `esql_control_config` block, in `panels` or `pinned_panels`, with `control_type = "VALUES_FROM_QUERY"` and no `esql_query`
+- WHEN Terraform validates the configuration
+- THEN the provider SHALL return an error that `esql_query` is required when `control_type` is `VALUES_FROM_QUERY`
 
 #### Scenario: Creation of esql_control panel with VALUES_FROM_QUERY control type
 

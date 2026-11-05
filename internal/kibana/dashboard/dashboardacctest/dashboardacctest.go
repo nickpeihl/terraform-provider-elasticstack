@@ -19,7 +19,10 @@
 // acceptance tests across multiple packages (dashboard root, panel/*).
 package dashboardacctest
 
-import "github.com/hashicorp/go-version"
+import (
+	"github.com/elastic/terraform-provider-elasticstack/internal/versionutils"
+	"github.com/hashicorp/go-version"
+)
 
 // MinDashboardAPISupport is the lowest Elastic Stack version known to expose the
 // Kibana Dashboard API surface that these acceptance tests exercise.
@@ -50,3 +53,15 @@ var MinDashboardAPISupport = version.Must(version.NewVersion("9.4.0-SNAPSHOT"))
 // by_esql branch is gated on this constant: it is a genuinely new API surface
 // that does not exist on Kibana servers below 9.5.0-SNAPSHOT.
 var MinControlByFieldEsqlUnionSupport = version.Must(version.NewVersion("9.5.0-SNAPSHOT"))
+
+// firstVersionWithKibanaIssue303291 is the first stack version on which updating a dashboard with a tag that does
+// not exist crashes Kibana: the update handler leaves the tag lookup's "not found" error unhandled
+// (https://github.com/elastic/kibana/issues/303291). Observed on 9.7.0; released versions pass these steps in CI.
+var firstVersionWithKibanaIssue303291 = version.Must(version.NewVersion("9.7.0-SNAPSHOT"))
+
+// SkipIfUpdatingWithMissingTagsCrashesKibana is a SkipFunc for a step that updates a dashboard with a tag that does
+// not exist. It skips from 9.7.0 and on serverless. Remove it once the fix for
+// https://github.com/elastic/kibana/issues/303291 is merged.
+func SkipIfUpdatingWithMissingTagsCrashesKibana() func() (bool, error) {
+	return versionutils.CheckIfVersionIsSupported(firstVersionWithKibanaIssue303291)
+}

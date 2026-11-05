@@ -481,6 +481,8 @@ func TestAccResourceDashboardPanelsJSONConfig(t *testing.T) {
 				},
 			},
 			{
+				// Updates the dashboard with tag "test", which does not exist.
+				SkipFunc:                 dashboardacctest.SkipIfUpdatingWithMissingTagsCrashesKibana(),
 				ProtoV6ProviderFactories: acctest.Providers,
 				ConfigDirectory:          acctest.NamedTestCaseDirectory("legacy_metric_json"),
 				ConfigVariables: config.Variables{
@@ -1022,7 +1024,8 @@ func TestAccResourceDashboardTagsNormalization(t *testing.T) {
 				),
 			},
 			{
-				// Non-empty tags: the API value must be stored in state.
+				// Non-empty tags: the API value must be stored in state. Tag "test" does not exist.
+				SkipFunc:                 dashboardacctest.SkipIfUpdatingWithMissingTagsCrashesKibana(),
 				ProtoV6ProviderFactories: acctest.Providers,
 				ConfigDirectory:          acctest.NamedTestCaseDirectory("non_empty"),
 				ConfigVariables: config.Variables{

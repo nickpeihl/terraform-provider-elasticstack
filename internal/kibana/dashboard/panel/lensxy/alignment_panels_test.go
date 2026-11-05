@@ -282,6 +282,38 @@ func TestAlignXYLayerStateFromPlan_staticYColorIsNotNormalizedToAuto(t *testing.
 	assert.JSONEq(t, stateJSON, stateLayers[0].DataLayer.Y[0].ConfigJSON.ValueString())
 }
 
+// Kibana 9.6+ reads back a y metric's static color as {"type":"auto"} when the layer has a breakdown:
+// it stores the color but leaves it out of the API response (the breakdown's palette colors the series),
+// and its schema then fills in the auto default. The planned color is kept.
+func TestAlignXYLayerStateFromPlan_staticYColorWithBreakdownReadBackAsAutoKeepsPlan(t *testing.T) {
+	t.Parallel()
+
+	planJSON := `{"column":"system.cpu.user.pct","color":{"type":"static","color":"#54B399"},"format":{"type":"number"}}`
+	stateJSON := `{"column":"system.cpu.user.pct","axis":"y","color":{"type":"auto"},"format":{"compact":false,"decimals":2,"type":"number"}}`
+	breakdownJSON := `{"column":"host.name"}`
+
+	planLayers := []models.XYLayerModel{{
+		DataLayer: &models.DataLayerModel{
+			BreakdownByJSON: jsontypes.NewNormalizedValue(breakdownJSON),
+			Y: []models.YMetricModel{{
+				ConfigJSON: jsontypes.NewNormalizedValue(planJSON),
+			}},
+		},
+	}}
+	stateLayers := []models.XYLayerModel{{
+		DataLayer: &models.DataLayerModel{
+			BreakdownByJSON: jsontypes.NewNormalizedValue(breakdownJSON),
+			Y: []models.YMetricModel{{
+				ConfigJSON: jsontypes.NewNormalizedValue(stateJSON),
+			}},
+		},
+	}}
+
+	alignXYLayerStateFromPlan(planLayers, stateLayers)
+
+	assert.JSONEq(t, planJSON, stateLayers[0].DataLayer.Y[0].ConfigJSON.ValueString())
+}
+
 func TestAlignXYLayerStateFromPlan_omittedReferenceLineThresholdDefaults(t *testing.T) {
 	t.Parallel()
 

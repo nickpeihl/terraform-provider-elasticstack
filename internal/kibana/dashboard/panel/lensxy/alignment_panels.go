@@ -188,8 +188,12 @@ func alignXYLayerStateFromPlan(planLayers, stateLayers []models.XYLayerModel) {
 			lenscommon.PreservePlanJSONIfStateAddsOptionalKeys(planLayer.DataLayer.BreakdownByJSON, &stateLayer.DataLayer.BreakdownByJSON)
 			lenscommon.PreservePlanNormalizedJSONWithDefaultsIfSemanticallyEqual(planLayer.DataLayer.BreakdownByJSON, &stateLayer.DataLayer.BreakdownByJSON, lenscommon.PopulateLensGroupByDefaults)
 
+			hasBreakdown := typeutils.IsKnown(stateLayer.DataLayer.BreakdownByJSON)
 			m := min(len(stateLayer.DataLayer.Y), len(planLayer.DataLayer.Y))
 			for j := range m {
+				if hasBreakdown {
+					restorePlannedYColorReadBackAsAuto(planLayer.DataLayer.Y[j].ConfigJSON, &stateLayer.DataLayer.Y[j].ConfigJSON)
+				}
 				lenscommon.PreservePlanJSONIfStateOmitsOptionalKeys(planLayer.DataLayer.Y[j].ConfigJSON, &stateLayer.DataLayer.Y[j].ConfigJSON, "color")
 				lenscommon.PreservePlanJSONIfStateAddsOptionalKeys(planLayer.DataLayer.Y[j].ConfigJSON, &stateLayer.DataLayer.Y[j].ConfigJSON, "axis_id")
 				lenscommon.PreservePlanNormalizedJSONWithDefaultsIfSemanticallyEqual(planLayer.DataLayer.Y[j].ConfigJSON, &stateLayer.DataLayer.Y[j].ConfigJSON, lenscommon.PopulateXYMetricDefaults)
@@ -398,4 +402,29 @@ func xyLegendEffectivelyUnset(m *models.XYLegendModel) bool {
 		!typeutils.IsKnown(m.Columns) &&
 		!typeutils.IsKnown(m.TruncateAfterLines) &&
 		(m.Statistics.IsNull() || m.Statistics.IsUnknown())
+}
+
+// restorePlannedYColorReadBackAsAuto puts the planned color back in place of a read-back
+// `color: {"type":"auto"}` on a y metric of a layer with a breakdown. Kibana stores the planned color
+// but leaves it out of the response when the layer has a breakdown (the breakdown's palette colors the
+// series); Kibana 9.6+ then fills in the schema's auto default, while 9.5 and earlier omit it. Without a
+// breakdown, an auto color read back is a real change and is left alone.
+func restorePlannedYColorReadBackAsAuto(plan jsontypes.Normalized, state *jsontypes.Normalized) {
+	if !typeutils.IsKnown(plan) || !typeutils.IsKnown(*state) {
+		return
+	}
+	var planObj, stateObj map[string]any
+	if json.Unmarshal([]byte(plan.ValueString()), &planObj) != nil || json.Unmarshal([]byte(state.ValueString()), &stateObj) != nil {
+		return
+	}
+	planColor, planHasColor := planObj["color"]
+	if !planHasColor || !reflect.DeepEqual(stateObj["color"], map[string]any{"type": "auto"}) {
+		return
+	}
+	stateObj["color"] = planColor
+	b, err := json.Marshal(stateObj)
+	if err != nil {
+		return
+	}
+	*state = jsontypes.NewNormalizedValue(string(b))
 }

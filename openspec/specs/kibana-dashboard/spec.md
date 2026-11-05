@@ -695,7 +695,7 @@ Datatable `metrics[].config_json` extras injected by Kibana 9.6.0-SNAPSHOT when 
 
 When omitted, the provider SHALL inject `legacy_metric_config.metric_json` extras `color: {type:"auto"}` and `size:"m"` only for field-metric operations (`count`, `sum`, `unique_count`, `min`, `max`, `average`, `median`, `standard_deviation`, `last_value`, `percentile`, `percentile_rank`). Injection of these extras is confirmed for `count`; the remaining field-metric operations are inferred from the shared Kibana metric schema. The provider SHALL NOT inject these extras for pipeline operations such as `formula`. Legacy metrics SHALL NOT assume an `axis` default.
 
-The resource SHALL NOT treat a practitioner-authored static Y-metric color as semantically equal to Kibana's `{type:"auto"}` read-back. Kibana 9.6 ES|QL XY overwrites practitioner static Y color; that overwrite is out of scope for this requirement.
+The resource SHALL NOT treat a practitioner-authored static Y-metric color as semantically equal to Kibana's `{type:"auto"}` read-back, except on a layer with `breakdown_by`. On such a layer Kibana stores the Y-metric color but leaves it out of the API response, because the breakdown's palette colors the series; Kibana 9.5 and earlier omit `color`, and Kibana 9.6 and later read it back as `{type:"auto"}` (the XY schema's default). This applies to ES|QL and data view layers alike. When a layer has `breakdown_by` and a planned `y[].config_json` sets `color`, the resource SHALL keep the planned `color` in state when Kibana reads it back as `{type:"auto"}`. Without `breakdown_by`, an `{type:"auto"}` read-back of a planned static color SHALL remain a difference.
 
 #### Scenario: Unset XY X-axis scale
 
@@ -892,11 +892,18 @@ The resource SHALL NOT treat a practitioner-authored static Y-metric color as se
 - THEN state SHALL hold Kibana's injected default for that field
 - AND a subsequent plan MAY show changes relative to a configuration that still omits the field
 
-#### Scenario: Kibana ES|QL XY static Y color overwrite is not treated as a default
+#### Scenario: XY static Y color read back as auto without a breakdown is not treated as a default
 
-- GIVEN an ES|QL XY panel whose `y[].config_json` sets a static color
-- WHEN Kibana's read-back replaces that color with `{type:"auto"}`
+- GIVEN an XY data layer without `breakdown_by` whose `y[].config_json` sets a static color
+- WHEN Kibana's read-back returns that color as `{type:"auto"}`
 - THEN the provider SHALL NOT treat the practitioner static color and `{type:"auto"}` as semantically equal
+
+#### Scenario: XY static Y color on a layer with a breakdown keeps the planned color
+
+- GIVEN an XY data layer (ES|QL or data view) with `breakdown_by` whose `y[].config_json` sets a static color
+- WHEN Kibana 9.6 or later reads that color back as `{type:"auto"}`
+- THEN the provider SHALL keep the planned `color` in state
+- AND apply SHALL NOT fail with "Provider produced inconsistent result after apply"
 
 ### Requirement: Markdown panel behavior (REQ-012)
 

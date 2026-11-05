@@ -1,0 +1,123 @@
+Component schemas reachable from the dashboard schemas: 466
+Properties with a `default`: 299
+Properties both in `required` and with a `default`: 0
+Optional properties whose description states a default but have no `default`: 91
+  Kibana_HTTP_APIs_aiops_change_point_chart.hide_border
+  Kibana_HTTP_APIs_aiops_change_point_chart.hide_title
+  Kibana_HTTP_APIs_aiops_log_rate_analysis.hide_border
+  Kibana_HTTP_APIs_aiops_log_rate_analysis.hide_title
+  Kibana_HTTP_APIs_aiops_pattern_analysis.hide_border
+  Kibana_HTTP_APIs_aiops_pattern_analysis.hide_title
+  Kibana_HTTP_APIs_apm-service-map-embeddable.hide_border
+  Kibana_HTTP_APIs_apm-service-map-embeddable.hide_title
+  Kibana_HTTP_APIs_data_visualizer_field_stats/oneOf.hide_border
+  Kibana_HTTP_APIs_data_visualizer_field_stats/oneOf.hide_border
+  Kibana_HTTP_APIs_data_visualizer_field_stats/oneOf.hide_title
+  Kibana_HTTP_APIs_data_visualizer_field_stats/oneOf.hide_title
+  Kibana_HTTP_APIs_kbn-as-code-filters-schema_asCodeConditionFilterSchema.disabled
+  Kibana_HTTP_APIs_kbn-as-code-filters-schema_asCodeConditionFilterSchema.is_multi_index
+  Kibana_HTTP_APIs_kbn-as-code-filters-schema_asCodeConditionFilterSchema.negate
+  Kibana_HTTP_APIs_kbn-as-code-filters-schema_asCodeDSLFilterSchema.disabled
+  Kibana_HTTP_APIs_kbn-as-code-filters-schema_asCodeDSLFilterSchema.is_multi_index
+  Kibana_HTTP_APIs_kbn-as-code-filters-schema_asCodeDSLFilterSchema.negate
+  Kibana_HTTP_APIs_kbn-as-code-filters-schema_asCodeGroupFilterSchema.disabled
+  Kibana_HTTP_APIs_kbn-as-code-filters-schema_asCodeGroupFilterSchema.is_multi_index
+  Kibana_HTTP_APIs_kbn-as-code-filters-schema_asCodeGroupFilterSchema.negate
+  Kibana_HTTP_APIs_kbn-as-code-filters-schema_asCodeSpatialFilterSchema.disabled
+  Kibana_HTTP_APIs_kbn-as-code-filters-schema_asCodeSpatialFilterSchema.is_multi_index
+  Kibana_HTTP_APIs_kbn-as-code-filters-schema_asCodeSpatialFilterSchema.negate
+  Kibana_HTTP_APIs_kbn-as-code-filters-schema_condition_exists.negate
+  Kibana_HTTP_APIs_kbn-as-code-filters-schema_condition_is.negate
+  Kibana_HTTP_APIs_kbn-as-code-filters-schema_condition_is_one_of.negate
+  Kibana_HTTP_APIs_kbn-as-code-filters-schema_condition_range.negate
+  Kibana_HTTP_APIs_kbn-dashboard-access-control.access_mode
+  Kibana_HTTP_APIs_kbn-dashboard-panel-type-custom_content/config.hide_border
+  Kibana_HTTP_APIs_kbn-dashboard-panel-type-custom_content/config.hide_title
+  Kibana_HTTP_APIs_kbn-dashboard-panel-type-discover_session/config/anyOf.hide_border
+  Kibana_HTTP_APIs_kbn-dashboard-panel-type-discover_session/config/anyOf.hide_border
+  Kibana_HTTP_APIs_kbn-dashboard-panel-type-discover_session/config/anyOf.hide_title
+  Kibana_HTTP_APIs_kbn-dashboard-panel-type-discover_session/config/anyOf.hide_title
+  Kibana_HTTP_APIs_kbn-dashboard-panel-type-discover_session/config/anyOf.selected_tab_id
+  Kibana_HTTP_APIs_kbn-dashboard-panel-type-discover_session/config/anyOf/tabs/items/anyOf.column_order
+  Kibana_HTTP_APIs_kbn-dashboard-panel-type-discover_session/config/anyOf/tabs/items/anyOf.column_order
+  Kibana_HTTP_APIs_kbn-dashboard-panel-type-discover_session/config/anyOf/tabs/items/anyOf.column_order
+  Kibana_HTTP_APIs_kbn-dashboard-panel-type-discover_session/config/anyOf/tabs/items/anyOf.grid_sort_direction
+  Kibana_HTTP_APIs_kbn-dashboard-panel-type-discover_session/config/anyOf/tabs/items/anyOf.row_height
+  Kibana_HTTP_APIs_kbn-dashboard-panel-type-discover_session/config/anyOf/tabs/items/anyOf.row_height
+  Kibana_HTTP_APIs_kbn-dashboard-panel-type-discover_session/config/anyOf/tabs/items/anyOf.row_height
+  Kibana_HTTP_APIs_kbn-dashboard-panel-type-discover_session/config/anyOf/tabs/items/anyOf.rows_per_page
+  Kibana_HTTP_APIs_kbn-dashboard-panel-type-discover_session/config/anyOf/tabs/items/anyOf.rows_per_page
+  Kibana_HTTP_APIs_kbn-dashboard-panel-type-discover_session/config/anyOf/tabs/items/anyOf.rows_per_page
+  Kibana_HTTP_APIs_kbn-dashboard-panel-type-discover_session/config/anyOf/tabs/items/anyOf.sample_size
+  Kibana_HTTP_APIs_kbn-dashboard-panel-type-discover_session/config/anyOf/tabs/items/anyOf.sample_size
+  Kibana_HTTP_APIs_kbn-dashboard-panel-type-discover_session/config/anyOf/tabs/items/anyOf.sample_size
+  Kibana_HTTP_APIs_kbn-dashboard-panel-type-image/config.hide_border
+  Kibana_HTTP_APIs_kbn-dashboard-panel-type-image/config.hide_title
+  Kibana_HTTP_APIs_kbn-dashboard-panel-type-links/config/anyOf.hide_border
+  Kibana_HTTP_APIs_kbn-dashboard-panel-type-links/config/anyOf.hide_border
+  Kibana_HTTP_APIs_kbn-dashboard-panel-type-links/config/anyOf.hide_title
+  Kibana_HTTP_APIs_kbn-dashboard-panel-type-links/config/anyOf.hide_title
+  Kibana_HTTP_APIs_kbn-dashboard-panel-type-markdown/config/anyOf.hide_border
+  Kibana_HTTP_APIs_kbn-dashboard-panel-type-markdown/config/anyOf.hide_border
+  Kibana_HTTP_APIs_kbn-dashboard-panel-type-markdown/config/anyOf.hide_title
+  Kibana_HTTP_APIs_kbn-dashboard-panel-type-markdown/config/anyOf.hide_title
+  Kibana_HTTP_APIs_kbn-dashboard-panel-type-synthetics_monitors/config.hide_border
+  Kibana_HTTP_APIs_kbn-dashboard-panel-type-synthetics_monitors/config.hide_title
+  Kibana_HTTP_APIs_kbn-dashboard-panel-type-synthetics_monitors/config.view
+  Kibana_HTTP_APIs_kbn-dashboard-panel-type-synthetics_stats_overview/config.hide_border
+  Kibana_HTTP_APIs_kbn-dashboard-panel-type-synthetics_stats_overview/config.hide_title
+  Kibana_HTTP_APIs_kbn-dashboard-panel-type-vis/config/anyOf.hide_border
+  Kibana_HTTP_APIs_kbn-dashboard-panel-type-vis/config/anyOf.hide_title
+  Kibana_HTTP_APIs_kbn-dashboard-panel-type-vis/config/anyOf/allOf.hide_border
+  Kibana_HTTP_APIs_kbn-dashboard-panel-type-vis/config/anyOf/allOf.hide_title
+  Kibana_HTTP_APIs_ml_anomaly_charts.hide_border
+  Kibana_HTTP_APIs_ml_anomaly_charts.hide_title
+  Kibana_HTTP_APIs_ml_anomaly_swimlane/anyOf.hide_border
+  Kibana_HTTP_APIs_ml_anomaly_swimlane/anyOf.hide_border
+  Kibana_HTTP_APIs_ml_anomaly_swimlane/anyOf.hide_title
+  Kibana_HTTP_APIs_ml_anomaly_swimlane/anyOf.hide_title
+  Kibana_HTTP_APIs_ml_single_metric_viewer.hide_border
+  Kibana_HTTP_APIs_ml_single_metric_viewer.hide_title
+  Kibana_HTTP_APIs_slo-alerts-embeddable.hide_border
+  Kibana_HTTP_APIs_slo-alerts-embeddable.hide_title
+  Kibana_HTTP_APIs_slo-burn-rate-embeddable.hide_border
+  Kibana_HTTP_APIs_slo-burn-rate-embeddable.hide_title
+  Kibana_HTTP_APIs_slo-error-budget-embeddable.hide_border
+  Kibana_HTTP_APIs_slo-error-budget-embeddable.hide_title
+  Kibana_HTTP_APIs_slo-group-overview-embeddable.hide_border
+  Kibana_HTTP_APIs_slo-group-overview-embeddable.hide_title
+  Kibana_HTTP_APIs_slo-single-overview-embeddable.hide_border
+  Kibana_HTTP_APIs_slo-single-overview-embeddable.hide_title
+  Kibana_HTTP_APIs_visColorFromPalette.palette
+  Kibana_HTTP_APIs_visDurationFormat.compact
+  Kibana_HTTP_APIs_visDurationFormat.decimals
+  Kibana_HTTP_APIs_visXyLayerNoESQL/breakdown_by/allOf.aggregate_first
+  Kibana_HTTP_APIs_visXyStyling.interpolation
+
+Panel types: 24
+  aiops_change_point_chart   2 unsupported: list of string ×1, x-tf-ref ×1
+  aiops_log_rate_analysis    1 unsupported: x-tf-ref ×1
+  aiops_pattern_analysis     2 unsupported: nullable ×1, x-tf-ref ×1
+  apm_service_map            5 unsupported: list of string ×5
+  custom_content             1 unsupported: list of string ×1
+  discover_session           1 unsupported: object without properties ×1
+  esql_control               1 unsupported: object without properties ×1
+  field_stats_table          1 unsupported: object without properties ×1
+  image                      4 unsupported: x-tf-flatten ×2, anyOf without x-tf-union ×1, union member without a single discriminator value ×1
+  links                      1 unsupported: object without properties ×1
+  markdown                   1 unsupported: object without properties ×1
+  ml_anomaly_charts          2 unsupported: list of <nil> ×1, list of string ×1
+  ml_anomaly_swimlane        1 unsupported: object without properties ×1
+  ml_single_metric_viewer    2 unsupported: list of string ×1, object without properties ×1
+  options_list_control       1 unsupported: object without properties ×1
+  range_slider_control       1 unsupported: object without properties ×1
+  slo_alerts                 generates
+  slo_burn_rate              generates
+  slo_error_budget           generates
+  slo_overview               1 unsupported: object without properties ×1
+  synthetics_monitors        generates
+  synthetics_stats_overview  generates
+  time_slider_control        generates
+  vis                        1 unsupported: object without properties ×1
+
+Unsupported constructs across panel types: object without properties ×11, list of string ×9, x-tf-ref ×3, x-tf-flatten ×2, anyOf without x-tf-union ×1, list of <nil> ×1, nullable ×1, union member without a single discriminator value ×1

@@ -1,0 +1,27 @@
+# Write: the config object each implementation sends for the same configuration
+
+## minimal
+hand-written: {"duration":"5m","slo_id":"slo-1"}
+computed:     {"duration":"5m","slo_id":"slo-1","slo_instance_id":"*"}
+preserve:     same
+
+## presentation
+hand-written: {"description":"About","duration":"5m","hide_border":true,"hide_title":false,"slo_id":"slo-1","title":"Burn"}
+computed:     {"description":"About","duration":"5m","hide_border":true,"hide_title":false,"slo_id":"slo-1","slo_instance_id":"*","title":"Burn"}
+preserve:     same
+
+## instance
+hand-written: {"duration":"5m","slo_id":"slo-1","slo_instance_id":"host-a"}
+computed:     same
+preserve:     same
+
+## instance_star
+hand-written: {"duration":"5m","slo_id":"slo-1","slo_instance_id":"*"}
+computed:     same
+preserve:     same
+
+## drilldowns
+hand-written: {"drilldowns":[{"label":"plain","trigger":"on_open_panel_menu","type":"url_drilldown","url":"https://a"},{"encode_url":false,"label":"off","open_in_new_tab":false,"trigger":"on_open_panel_menu","type":"url_drilldown","url":"https://b"},{"encode_url":true,"label":"on","open_in_new_tab":true,"trigger":"on_open_panel_menu","type":"url_drilldown","url":"https://c"}],"duration":"5m","slo_id":"slo-1"}
+computed:     {"drilldowns":[{"encode_url":true,"label":"plain","open_in_new_tab":true,"trigger":"on_open_panel_menu","type":"url_drilldown","url":"https://a"},{"encode_url":false,"label":"off","open_in_new_tab":false,"trigger":"on_open_panel_menu","type":"url_drilldown","url":"https://b"},{"encode_url":true,"label":"on","open_in_new_tab":true,"trigger":"on_open_panel_menu","type":"url_drilldown","url":"https://c"}],"duration":"5m","slo_id":"slo-1","slo_instance_id":"*"}
+preserve:     same
+

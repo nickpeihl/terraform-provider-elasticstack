@@ -1,0 +1,13 @@
+{
+  "kibana_version": "9.7.0",
+  "request": {
+    "duration": "5m",
+    "slo_id": "slo-1",
+    "slo_instance_id": "host-a"
+  },
+  "response": {
+    "slo_id": "slo-1",
+    "slo_instance_id": "host-a",
+    "duration": "5m"
+  }
+}

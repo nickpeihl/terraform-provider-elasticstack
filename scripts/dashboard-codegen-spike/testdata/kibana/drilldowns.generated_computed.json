@@ -1,0 +1,65 @@
+{
+  "kibana_version": "9.7.0",
+  "request": {
+    "drilldowns": [
+      {
+        "encode_url": true,
+        "label": "plain",
+        "open_in_new_tab": true,
+        "trigger": "on_open_panel_menu",
+        "type": "url_drilldown",
+        "url": "https://a"
+      },
+      {
+        "encode_url": false,
+        "label": "off",
+        "open_in_new_tab": false,
+        "trigger": "on_open_panel_menu",
+        "type": "url_drilldown",
+        "url": "https://b"
+      },
+      {
+        "encode_url": true,
+        "label": "on",
+        "open_in_new_tab": true,
+        "trigger": "on_open_panel_menu",
+        "type": "url_drilldown",
+        "url": "https://c"
+      }
+    ],
+    "duration": "5m",
+    "slo_id": "slo-1",
+    "slo_instance_id": "*"
+  },
+  "response": {
+    "slo_id": "slo-1",
+    "slo_instance_id": "*",
+    "duration": "5m",
+    "drilldowns": [
+      {
+        "encode_url": true,
+        "open_in_new_tab": true,
+        "url": "https://a",
+        "label": "plain",
+        "trigger": "on_open_panel_menu",
+        "type": "url_drilldown"
+      },
+      {
+        "encode_url": false,
+        "open_in_new_tab": false,
+        "url": "https://b",
+        "label": "off",
+        "trigger": "on_open_panel_menu",
+        "type": "url_drilldown"
+      },
+      {
+        "encode_url": true,
+        "open_in_new_tab": true,
+        "url": "https://c",
+        "label": "on",
+        "trigger": "on_open_panel_menu",
+        "type": "url_drilldown"
+      }
+    ]
+  }
+}

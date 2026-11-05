@@ -1,0 +1,26 @@
+# Read: state after apply (prior = plan) and after import (no prior), compared with the plan
+# "consistent" means equal to the plan: no "inconsistent result after apply" and, for import,
+# no diff against the configuration. Responses: testdata/kibana/, recorded from a live Kibana.
+
+| case | implementation | after apply | after import |
+| --- | --- | --- | --- |
+| minimal | hand-written | consistent | consistent |
+| minimal | generated computed | consistent | consistent |
+| minimal | generated preserve | consistent | consistent |
+| minimal | control: plain read | differs: slo_instance_id: <null> → "*" | differs: slo_instance_id: <null> → "*" |
+| presentation | hand-written | consistent | consistent |
+| presentation | generated computed | consistent | consistent |
+| presentation | generated preserve | consistent | consistent |
+| presentation | control: plain read | differs: slo_instance_id: <null> → "*" | differs: slo_instance_id: <null> → "*" |
+| instance | hand-written | consistent | consistent |
+| instance | generated computed | consistent | consistent |
+| instance | generated preserve | consistent | consistent |
+| instance | control: plain read | consistent | consistent |
+| instance_star | hand-written | consistent | differs: slo_instance_id: "*" → <null> |
+| instance_star | generated computed | consistent | consistent |
+| instance_star | generated preserve | consistent | differs: slo_instance_id: "*" → <null> |
+| instance_star | control: plain read | consistent | consistent |
+| drilldowns | hand-written | consistent | differs: drilldowns[0].open_in_new_tab: <null> → true; drilldowns[1].open_in_new_tab: false → <null>; drilldowns[2].encode_url: true → <null> |
+| drilldowns | generated computed | consistent | consistent |
+| drilldowns | generated preserve | consistent | differs: drilldowns[2].url_drilldown.encode_url: true → <null>; drilldowns[2].url_drilldown.open_in_new_tab: true → <null> |
+| drilldowns | control: plain read | differs: drilldowns[0].url_drilldown.encode_url: <null> → true; drilldowns[0].url_drilldown.open_in_new_tab: <null> → true; slo_instance_id: <null> → "*" | differs: drilldowns[0].url_drilldown.encode_url: <null> → true; drilldowns[0].url_drilldown.open_in_new_tab: <null> → true; slo_instance_id: <null> → "*" |

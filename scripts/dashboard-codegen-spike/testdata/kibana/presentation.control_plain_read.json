@@ -1,0 +1,20 @@
+{
+  "kibana_version": "9.7.0",
+  "request": {
+    "description": "About",
+    "duration": "5m",
+    "hide_border": true,
+    "hide_title": false,
+    "slo_id": "slo-1",
+    "title": "Burn"
+  },
+  "response": {
+    "slo_id": "slo-1",
+    "slo_instance_id": "*",
+    "duration": "5m",
+    "description": "About",
+    "hide_title": false,
+    "title": "Burn",
+    "hide_border": true
+  }
+}

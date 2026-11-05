@@ -1,0 +1,29 @@
+--- a/src/platform/packages/shared/as-code/dashboard-terraform/src/oas_model.ts
++++ b/src/platform/packages/shared/as-code/dashboard-terraform/src/oas_model.ts
+@@ -75,6 +75,7 @@
+   tfName: string;
+   node: TNode;
+   required: boolean;
++  hasDefault?: boolean;
+   flatten?: boolean;
+   /** The API value is an object with this single property; the attribute holds that property's value (`node`). */
+   unwrap?: string;
+@@ -428,6 +429,7 @@
+           tfName: isPropLeaf ? p.jsonName ?? `${propName}_json` : propName,
+           node,
+           required: (s.required ?? []).includes(propName),
++          hasDefault: p.default !== undefined,
+           flatten: !!p['x-tf-flatten'],
+           ...(unwrapName !== undefined && { unwrap: unwrapName }),
+         });
+--- a/src/platform/packages/shared/as-code/dashboard-terraform/src/attribute_tree.ts
++++ b/src/platform/packages/shared/as-code/dashboard-terraform/src/attribute_tree.ts
+@@ -58,7 +58,7 @@
+     if (prop.flatten) return emitFields(prop.node, base);
+     const path = base ? `${base}.${prop.tfName}` : prop.tfName;
+     // Required in the API is required in Terraform. Computed-ness is not derivable from the OpenAPI document.
+-    attributes.push({ path, ...kindOf(prop.node), mode: prop.required ? 'required' : 'optional' });
++    attributes.push({ path, ...kindOf(prop.node), mode: prop.required ? 'required' : prop.hasDefault ? 'optional_computed' : 'optional' });
+     emitFields(prop.node, path);
+   };
+ 

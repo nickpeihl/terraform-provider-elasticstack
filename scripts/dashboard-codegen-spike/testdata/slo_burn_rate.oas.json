@@ -1,0 +1,166 @@
+{
+  "components": {
+    "schemas": {
+      "Kibana_HTTP_APIs_kbn-dashboard-panel-grid": {
+        "additionalProperties": false,
+        "description": "The position and size of the panel on the dashboard grid.",
+        "properties": {
+          "h": {
+            "default": 15,
+            "description": "The height of the panel in grid units. Minimum `1`. Defaults to `15`.",
+            "minimum": 1,
+            "type": "number"
+          },
+          "w": {
+            "default": 24,
+            "description": "The width of the panel in grid units. Minimum `1`, maximum `48`. Defaults to `24`.",
+            "maximum": 48,
+            "minimum": 1,
+            "type": "number"
+          },
+          "x": {
+            "description": "The x coordinate of the panel in grid units.",
+            "type": "number"
+          },
+          "y": {
+            "description": "The y coordinate of the panel in grid units.",
+            "type": "number"
+          }
+        },
+        "required": [
+          "x",
+          "y"
+        ],
+        "title": "Panel grid",
+        "type": "object"
+      },
+      "Kibana_HTTP_APIs_kbn-dashboard-panel-type-slo_burn_rate": {
+        "additionalProperties": false,
+        "properties": {
+          "config": {
+            "$ref": "#/components/schemas/Kibana_HTTP_APIs_slo-burn-rate-embeddable"
+          },
+          "grid": {
+            "$ref": "#/components/schemas/Kibana_HTTP_APIs_kbn-dashboard-panel-grid"
+          },
+          "id": {
+            "description": "The unique ID of the panel.",
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "slo_burn_rate"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "grid",
+          "config"
+        ],
+        "title": "SLO burn rate",
+        "type": "object"
+      },
+      "Kibana_HTTP_APIs_slo-burn-rate-embeddable": {
+        "additionalProperties": false,
+        "description": "SLO Burn Rate embeddable schema",
+        "properties": {
+          "description": {
+            "description": "A short description of the panel.",
+            "type": "string"
+          },
+          "drilldowns": {
+            "items": {
+              "anyOf": [
+                {
+                  "properties": {
+                    "encode_url": {
+                      "default": true,
+                      "description": "When true, URL is escaped using percent encoding",
+                      "type": "boolean"
+                    },
+                    "label": {
+                      "type": "string"
+                    },
+                    "open_in_new_tab": {
+                      "default": true,
+                      "type": "boolean"
+                    },
+                    "trigger": {
+                      "anyOf": [
+                        {
+                          "enum": [
+                            "on_open_panel_menu"
+                          ],
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "type": {
+                      "enum": [
+                        "url_drilldown"
+                      ],
+                      "type": "string"
+                    },
+                    "url": {
+                      "description": "Templated Url. Variables documented at https://www.elastic.co/docs/explore-analyze/dashboards/drilldowns#url-template-variable",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "url",
+                    "label",
+                    "trigger",
+                    "type"
+                  ],
+                  "title": "url_drilldown",
+                  "type": "object"
+                }
+              ],
+              "x-tf-union": {
+                "discriminator": "type",
+                "key_template": "{value}"
+              }
+            },
+            "maxItems": 100,
+            "type": "array"
+          },
+          "duration": {
+            "description": "Duration for the burn rate chart in the format [value][unit], e.g. 5m, 3h, or 6d",
+            "maxLength": 32,
+            "type": "string"
+          },
+          "hide_border": {
+            "description": "When true, the panel border is hidden. Defaults to false.",
+            "type": "boolean"
+          },
+          "hide_title": {
+            "description": "When true, the panel title is hidden. Defaults to false.",
+            "type": "boolean"
+          },
+          "slo_id": {
+            "description": "The ID of the SLO to display the burn rate for",
+            "maxLength": 64,
+            "type": "string"
+          },
+          "slo_instance_id": {
+            "default": "*",
+            "description": "ID of the SLO instance. Set when the SLO uses group_by; identifies which instance to show. Defaults to * (all instances).",
+            "maxLength": 512,
+            "type": "string"
+          },
+          "title": {
+            "description": "The panel title.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "slo_id",
+          "duration"
+        ],
+        "type": "object"
+      }
+    }
+  }
+}

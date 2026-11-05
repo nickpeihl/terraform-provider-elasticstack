@@ -1,0 +1,56 @@
+# Schema: generated (computed strategy) versus hand-written slo_burn_rate_config
+# The preserve strategy differs from computed only in dropping Computed and Default.
+
+## Same
+= same               description: string, optional
+= same               drilldowns: list(object), optional, validators: list must contain at most 100 elements
+= same               hide_border: bool, optional
+= same               hide_title: bool, optional
+= same               title: string, optional
+
+## Structure
+- only hand-written  drilldowns[].encode_url: bool, optional
+- only hand-written  drilldowns[].label: string, required
+- only hand-written  drilldowns[].open_in_new_tab: bool, optional
+- only hand-written  drilldowns[].url: string, required
++ only generated     drilldowns[].url_drilldown: object, required
++ only generated     drilldowns[].url_drilldown.encode_url: bool, optional+computed, default: value defaults to true
++ only generated     drilldowns[].url_drilldown.label: string, required
++ only generated     drilldowns[].url_drilldown.open_in_new_tab: bool, optional+computed, default: value defaults to true
++ only generated     drilldowns[].url_drilldown.trigger: string, required, validators: value must be one of: ["on_open_panel_menu"]
++ only generated     drilldowns[].url_drilldown.url: string, required
+~ differs            duration
+    hand-written: string, required, validators: must match the pattern `^\d+[mhd]$` (a positive integer followed by m, h, or d)
+    generated:    string, required, validators: string length must be at most 32
+~ differs            slo_id
+    hand-written: string, required
+    generated:    string, required, validators: string length must be at most 64
+~ differs            slo_instance_id
+    hand-written: string, optional
+    generated:    string, optional+computed, default: value defaults to *, validators: string length must be at most 512
+
+## Descriptions
+description
+    hand-written: "Optional panel description."
+    generated:    "A short description of the panel."
+drilldowns
+    hand-written: "Optional list of URL drilldowns attached to the panel."
+    generated:    ""
+duration
+    hand-written: "Duration for the burn rate chart in the format `[value][unit]`, where unit is `m` (minutes), `h` (hours), or `d` (days). For example: `5m`, `3h`, `6d`."
+    generated:    "Duration for the burn rate chart in the format [value][unit], e.g. 5m, 3h, or 6d"
+hide_border
+    hand-written: "When true, hides the panel border."
+    generated:    "When true, the panel border is hidden. Defaults to false."
+hide_title
+    hand-written: "When true, hides the panel title."
+    generated:    "When true, the panel title is hidden. Defaults to false."
+slo_id
+    hand-written: "The ID of the SLO to display the burn rate for."
+    generated:    "The ID of the SLO to display the burn rate for"
+slo_instance_id
+    hand-written: "ID of the SLO instance. Set when the SLO uses `group_by`; identifies which instance to show. Omit to show all instances (API default `\"*\"`)."
+    generated:    "ID of the SLO instance. Set when the SLO uses group_by; identifies which instance to show. Defaults to * (all instances)."
+title
+    hand-written: "Optional panel title shown in the panel header."
+    generated:    "The panel title."

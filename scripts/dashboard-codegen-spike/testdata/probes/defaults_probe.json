@@ -1,0 +1,74 @@
+{
+  "kibana_version": "9.7.0",
+  "note": "PUT request, and the dashboard Kibana returned (filters, options, panels). Fields omitted from the request that Kibana filled are the ones carrying `default` in the OpenAPI document.",
+  "request": {
+    "title": "tf-export-13 probe 2",
+    "filters": [
+      {
+        "type": "condition",
+        "condition": {
+          "field": "status",
+          "operator": "is",
+          "value": "active"
+        }
+      }
+    ],
+    "panels": [
+      {
+        "type": "synthetics_monitors",
+        "grid": {
+          "x": 0,
+          "y": 0,
+          "w": 24,
+          "h": 10
+        },
+        "config": {}
+      },
+      {
+        "type": "time_slider_control",
+        "grid": {
+          "x": 24,
+          "y": 0,
+          "w": 24,
+          "h": 4
+        },
+        "config": {}
+      }
+    ]
+  },
+  "response": {
+    "filters": [
+      {
+        "type": "condition",
+        "condition": {
+          "field": "status",
+          "operator": "is",
+          "value": "active"
+        }
+      }
+    ],
+    "options": {
+      "auto_apply_filters": true,
+      "hide_panel_titles": false,
+      "hide_panel_borders": false,
+      "use_margins": true,
+      "sync_colors": false,
+      "sync_tooltips": false,
+      "sync_cursor": true
+    },
+    "panels": [
+      {
+        "type": "synthetics_monitors",
+        "config": {}
+      },
+      {
+        "type": "time_slider_control",
+        "config": {
+          "start_percentage_of_time_range": 0,
+          "end_percentage_of_time_range": 1,
+          "is_anchored": false
+        }
+      }
+    ]
+  }
+}

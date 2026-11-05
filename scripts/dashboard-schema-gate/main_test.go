@@ -170,8 +170,9 @@ func TestCheckPassesOnTheKnownKindMismatchesRecountedByUniquePath(t *testing.T) 
 
 	require.NoError(t, err, out)
 	// The prototype's diff listed 15 lines, some repeated under sections: 14 by unique attribute path, 7 since
-	// tf-export 11 unwrapped the XY axis grid and ticks and the field statistics ES|QL query.
-	require.Contains(t, out, "7 known kind mismatch(es)")
+	// tf-export 11 unwrapped the XY axis grid and ticks and the field statistics ES|QL query, and 6 since
+	// tf-export 12 mapped reference-line thresholds to objects.
+	require.Contains(t, out, "6 known kind mismatch(es)")
 	var known knownMismatches
 	require.NoError(t, readJSON(filepath.Join(dir, knownMismatchesFile), &known))
 	for line := range known {
@@ -201,7 +202,7 @@ func TestCheckFailsUntilAFixedKindMismatchIsRemoved(t *testing.T) {
 	editJSON(t, filepath.Join(dir, baselineFile), func(v any) any { return append(v.([]any), unmasked) })
 	out, err = runGate(t, "check", "--dir", dir, "--base-dir", base)
 	require.NoError(t, err, out)
-	require.Contains(t, out, "6 known kind mismatch(es)")
+	require.Contains(t, out, "5 known kind mismatch(es)")
 }
 
 func TestCheckFailsWhenTheKnownKindMismatchesGrow(t *testing.T) {

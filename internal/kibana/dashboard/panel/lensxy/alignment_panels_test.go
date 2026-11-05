@@ -18,8 +18,10 @@
 package lensxy
 
 import (
+	"encoding/json"
 	"testing"
 
+	"github.com/elastic/terraform-provider-elasticstack/generated/kbapi"
 	"github.com/elastic/terraform-provider-elasticstack/internal/kibana/dashboard/models"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -538,4 +540,80 @@ func TestAlignXYLayerStateFromPlan_nonStaticThresholdIgnoresKibanaAddedAxisAndEm
 	alignXYChartStateFromPlan(plan, state)
 
 	assert.Equal(t, planValue, state.Layers[0].ReferenceLineLayer.Thresholds[0].ValueJSON.ValueString())
+}
+
+// A threshold written whole in value_json (as Kibana's Terraform export writes it) is read back with its styling in
+// the typed attributes. Those are cleared where value_json carries the same value, and kept where it differs.
+func TestAlignXYLayerStateFromPlan_wholeThresholdInValueJSONReadBack(t *testing.T) {
+	t.Parallel()
+
+	styled := `{"operation":"static_value","value":42,"axis":"y2","color":{"type":"static","color":"#E7664C"},` +
+		`"text":{"visible":true},"fill":"above","icon":"alert","stroke_width":2,"stroke_dash":"dashed"}`
+	tests := []struct {
+		name     string
+		planned  string
+		returned string
+		want     func(t *testing.T, plan, got models.ThresholdModel)
+	}{
+		{
+			name:     "styled static threshold reads back as planned",
+			planned:  styled,
+			returned: styled,
+			want: func(t *testing.T, plan, got models.ThresholdModel) {
+				assert.Equal(t, plan, got)
+			},
+		},
+		{
+			name:     "count threshold reads back as planned",
+			planned:  `{"operation":"count","empty_as_null":false,"axis":"y","color":{"type":"auto"}}`,
+			returned: `{"operation":"count","empty_as_null":false,"axis":"y","color":{"type":"auto"}}`,
+			want: func(t *testing.T, plan, got models.ThresholdModel) {
+				assert.Equal(t, plan, got)
+			},
+		},
+		{
+			name:    "changed styling stays visible",
+			planned: styled,
+			returned: `{"operation":"static_value","value":42,"axis":"y2","color":{"type":"static","color":"#54B399"},` +
+				`"text":{"visible":true},"fill":"below","icon":"alert","stroke_width":2,"stroke_dash":"dashed"}`,
+			want: func(t *testing.T, _, got models.ThresholdModel) {
+				assert.Equal(t, "below", got.Fill.ValueString())
+				assert.JSONEq(t, `{"type":"static","color":"#54B399"}`, got.ColorJSON.ValueString())
+				assert.True(t, got.Icon.IsNull())
+				assert.True(t, got.StrokeDash.IsNull())
+				assert.True(t, got.StrokeWidth.IsNull())
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			var api kbapi.KibanaHTTPAPIsVisXyReferenceLineLayerNoESQL
+			require.NoError(t, json.Unmarshal([]byte(`{"type":"reference_lines",`+
+				`"data_source":{"type":"data_view_spec","index_pattern":"logs-*"},"thresholds":[`+tt.returned+`]}`), &api))
+			state := &models.ReferenceLineLayerModel{}
+			require.False(t, referenceLineLayerFromAPINoESQL(state, api).HasError())
+			plan := models.ThresholdModel{
+				Axis:        types.StringNull(),
+				ColorJSON:   jsontypes.NewNormalizedNull(),
+				Column:      types.StringNull(),
+				ValueJSON:   jsontypes.NewNormalizedValue(tt.planned),
+				Fill:        types.StringNull(),
+				Icon:        types.StringNull(),
+				Operation:   types.StringNull(),
+				StrokeDash:  types.StringNull(),
+				StrokeWidth: types.Float64Null(),
+				Text:        types.StringNull(),
+			}
+			stateLayers := []models.XYLayerModel{{ReferenceLineLayer: state}}
+
+			alignXYLayerStateFromPlan(
+				[]models.XYLayerModel{{ReferenceLineLayer: &models.ReferenceLineLayerModel{Thresholds: []models.ThresholdModel{plan}}}},
+				stateLayers,
+			)
+
+			tt.want(t, plan, stateLayers[0].ReferenceLineLayer.Thresholds[0])
+		})
+	}
 }

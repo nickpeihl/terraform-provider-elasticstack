@@ -5604,7 +5604,12 @@
     {
       "path": "panels[].vis_config.by_value.xy_chart_config.layers[].reference_line_layer.thresholds",
       "kind": "list",
-      "element": "json-string",
+      "element": "object",
+      "mode": "required"
+    },
+    {
+      "path": "panels[].vis_config.by_value.xy_chart_config.layers[].reference_line_layer.thresholds[].value_json",
+      "kind": "json-string",
       "mode": "required"
     },
     {
@@ -11766,7 +11771,12 @@
     {
       "path": "sections[].panels[].vis_config.by_value.xy_chart_config.layers[].reference_line_layer.thresholds",
       "kind": "list",
-      "element": "json-string",
+      "element": "object",
+      "mode": "required"
+    },
+    {
+      "path": "sections[].panels[].vis_config.by_value.xy_chart_config.layers[].reference_line_layer.thresholds[].value_json",
+      "kind": "json-string",
       "mode": "required"
     },
     {

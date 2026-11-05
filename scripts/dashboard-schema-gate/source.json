@@ -1,6 +1,6 @@
 {
   "kibana_repo": "nickpeihl/kibana",
-  "kibana_ref": "5a948a541940f8460430be3e83ca6ff472651de4",
+  "kibana_ref": "eba850d13953071eff8b628646474ba935a05124",
   "provider_version": "0.16.6",
-  "provider_commit": "dde805511b27"
+  "provider_commit": "10a9ad705511"
 }

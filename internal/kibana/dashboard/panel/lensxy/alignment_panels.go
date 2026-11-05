@@ -211,6 +211,7 @@ func alignXYLayerStateFromPlan(planLayers, stateLayers []models.XYLayerModel) {
 			stateThreshold := &stateLayer.ReferenceLineLayer.Thresholds[j]
 			restoreTypedOperationIfValueJSONOmitted(planThreshold, stateThreshold)
 			drifted := reconcileThresholdAxis(planThreshold, stateThreshold)
+			clearTypedThresholdStylingCarriedInPlanJSON(planThreshold, stateThreshold)
 			lenscommon.PreserveNullIfStateEquals(planThreshold.Operation, &stateThreshold.Operation, types.StringValue(operationStaticValue))
 			lenscommon.PreserveNullJSONIfStateMatchesDefault(planThreshold.ColorJSON, &stateThreshold.ColorJSON, `{"type":"auto"}`)
 			if !drifted {
@@ -321,6 +322,38 @@ func reconcileThresholdAxis(plan models.ThresholdModel, state *models.ThresholdM
 		state.Axis = plan.Axis
 	}
 	return false
+}
+
+// clearTypedThresholdStylingCarriedInPlanJSON clears the typed styling attributes the read-back fills in from a
+// threshold the plan wrote whole in value_json (as Kibana's Terraform export does). An attribute is cleared only
+// when the plan left it unset and value_json holds the same value under its API key, so a changed value stays
+// visible as drift.
+func clearTypedThresholdStylingCarriedInPlanJSON(plan models.ThresholdModel, state *models.ThresholdModel) {
+	planObj, ok := parseJSONObject(plan.ValueJSON)
+	if !ok {
+		return
+	}
+	carries := func(key string, stateValue any) bool {
+		planValue, has := planObj[key]
+		return has && reflect.DeepEqual(planValue, stateValue)
+	}
+	clearString := func(key string, planAttr types.String, stateAttr *types.String) {
+		if planAttr.IsNull() && typeutils.IsKnown(*stateAttr) && carries(key, stateAttr.ValueString()) {
+			*stateAttr = types.StringNull()
+		}
+	}
+	clearString("fill", plan.Fill, &state.Fill)
+	clearString("icon", plan.Icon, &state.Icon)
+	clearString("stroke_dash", plan.StrokeDash, &state.StrokeDash)
+	if plan.StrokeWidth.IsNull() && typeutils.IsKnown(state.StrokeWidth) && carries("stroke_width", state.StrokeWidth.ValueFloat64()) {
+		state.StrokeWidth = types.Float64Null()
+	}
+	if plan.ColorJSON.IsNull() && typeutils.IsKnown(state.ColorJSON) {
+		var color any
+		if json.Unmarshal([]byte(state.ColorJSON.ValueString()), &color) == nil && carries("color", color) {
+			state.ColorJSON = jsontypes.NewNormalizedNull()
+		}
+	}
 }
 
 // parseJSONObject decodes a known JSON object value; ok is false for unknown, invalid or non-object JSON.
